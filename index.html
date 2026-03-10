@@ -1,17 +1,237 @@
+<!-- index.html -->
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Atlas Flux</title>
-    <link rel="stylesheet" href="style.css" />
+    <title>AtlasFlux</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/atlas-logo.png" />
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0b0b0b" />
+    <!-- Google Fonts -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <!-- EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <!-- Content akan ditulis kemudian -->
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+      <div class="container nav-container">
+        <a href="#" class="logo" id="home-link">
+          <img src="assets/atlas.png" alt="AtlasFlux" class="logo-img" />
+          <span class="logo-text">AtlasFlux</span>
+        </a>
+        <ul class="nav-menu">
+          <li><a href="#" class="nav-link active" data-page="home">Home</a></li>
+          <li><a href="#" class="nav-link" data-page="about">About</a></li>
+          <li><a href="#" class="nav-link" data-page="contact">Contact</a></li>
+        </ul>
+        <div class="hamburger">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content (home) -->
+    <div id="main-content">
+      <!-- Hero Section -->
+      <section class="hero">
+        <div class="container hero-container">
+          <h1 class="hero-title animate-on-scroll">
+            <span class="gradient-text">AtlasFlux</span><br />
+            Where AI Meets Code
+          </h1>
+          <p class="hero-subtitle animate-on-scroll">
+            Empowering the next generation of developers with cutting‑edge AI
+            tools and interactive coding tutorials.
+          </p>
+          <div class="hero-buttons animate-on-scroll">
+            <a
+              href="https://ai.atlasflux.my"
+              class="btn btn-primary"
+              target="_blank"
+              >Explore AI</a
+            >
+            <a
+              href="https://learn.atlasflux.my"
+              class="btn btn-secondary"
+              target="_blank"
+              >Start Learning</a
+            >
+          </div>
+        </div>
+        <div class="hero-bg-pattern"></div>
+      </section>
+
+      <!-- What We Offer Section (Cards) -->
+      <section class="offers">
+        <div class="container">
+          <h2 class="section-title animate-on-scroll">What We Offer</h2>
+          <div class="cards-grid">
+            <!-- AI Card -->
+            <div class="card animate-on-scroll slide-left" id="aiCard">
+              <div class="card-icon-wrapper">
+                <i class="fas fa-robot card-icon"></i>
+              </div>
+              <h3>Artificial Intelligence</h3>
+              <p>
+                Harness the power of AI with our suite of tools, chatbots, and
+                generative models.
+              </p>
+              <a
+                href="https://ai.atlasflux.my"
+                class="card-link"
+                target="_blank"
+                >Learn more <i class="fas fa-arrow-right"></i
+              ></a>
+            </div>
+            <!-- Learn Coding Card -->
+            <div class="card animate-on-scroll slide-right" id="codingCard">
+              <div class="card-icon-wrapper">
+                <i class="fas fa-code card-icon"></i>
+              </div>
+              <h3>Learn Coding</h3>
+              <p>
+                Master programming through interactive lessons, real‑world
+                projects, and community.
+              </p>
+              <a
+                href="https://learn.atlasflux.my"
+                class="card-link"
+                target="_blank"
+                >Learn more <i class="fas fa-arrow-right"></i
+              ></a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Policies & Resources Section -->
+      <section class="policies">
+        <div class="container">
+          <h2 class="section-title animate-on-scroll">Policies & Resources</h2>
+          <div class="policies-grid">
+            <div class="policy-card animate-on-scroll" data-page="legal">
+              <i class="fas fa-gavel policy-icon"></i>
+              <h3>Legal & Compliance</h3>
+              <p>Our commitment to regulatory standards.</p>
+              <a href="#" class="policy-link">Read more</a>
+            </div>
+            <div class="policy-card animate-on-scroll" data-page="faq">
+              <i class="fas fa-question-circle policy-icon"></i>
+              <h3>FAQ</h3>
+              <p>Frequently asked questions.</p>
+              <a href="#" class="policy-link">Read more</a>
+            </div>
+            <div class="policy-card animate-on-scroll" data-page="cookie">
+              <i class="fas fa-cookie-bite policy-icon"></i>
+              <h3>Cookie Policy</h3>
+              <p>How we use cookies.</p>
+              <a href="#" class="policy-link">Read more</a>
+            </div>
+            <div class="policy-card animate-on-scroll" data-page="systems">
+              <i class="fas fa-sync-alt policy-icon"></i>
+              <h3>Systems Update</h3>
+              <p>Latest updates and maintenance.</p>
+              <a href="#" class="policy-link">Read more</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Policy Content (hidden by default) -->
+    <div id="policy-content" style="display: none">
+      <div class="container policy-container">
+        <button class="back-btn" id="back-to-main">
+          <i class="fas fa-arrow-left"></i> Back
+        </button>
+        <div id="policy-text"></div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container footer-container">
+        <div class="footer-logo">
+          <img src="assets/atlas.png" alt="AtlasFlux" class="footer-logo-img" />
+          <span>AtlasFlux</span>
+        </div>
+        <div class="footer-links">
+          <div class="footer-column">
+            <h4>Explore</h4>
+            <ul>
+              <li><a href="https://ai.atlasflux.my" target="_blank">AI</a></li>
+              <li>
+                <a href="https://learn.atlasflux.my" target="_blank"
+                  >Learn Coding</a
+                >
+              </li>
+              <li><a href="#" data-page="about">About</a></li>
+              <li><a href="#" data-page="contact">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h4>Legal</h4>
+            <ul>
+              <li><a href="#" data-page="terms">Terms of Service</a></li>
+              <li><a href="#" data-page="privacy">Privacy Policy</a></li>
+              <li><a href="#" data-page="disclaimer">Disclaimer</a></li>
+              <li><a href="#" data-page="cookie">Cookie Policy</a></li>
+              <li><a href="#" data-page="legal">Legal & Compliance</a></li>
+              <li><a href="#" data-page="systems">Systems Update</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h4>Connect</h4>
+            <div class="social-icons">
+              <a
+                href="https://www.instagram.com/atlasflux.my"
+                target="_blank"
+                aria-label="Instagram"
+                ><i class="fab fa-instagram"></i
+              ></a>
+              <a
+                href="https://atlasflux.my"
+                target="_blank"
+                aria-label="Website"
+                ><i class="fas fa-globe"></i
+              ></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 AtlasFlux. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <!-- Custom JavaScript -->
     <script src="script.js"></script>
+    <!-- Service Worker Registration -->
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("/sw.js")
+            .then((reg) => console.log("Service Worker registered"))
+            .catch((err) => console.log("Service Worker registration failed"));
+        });
+      }
+    </script>
   </body>
 </html>
