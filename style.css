@@ -30,13 +30,20 @@ body {
     background-color 0.3s ease,
     backdrop-filter 0.3s ease,
     padding 0.3s ease;
-  z-index: 1000;
+  z-index: 1000; /* tinggi, di atas menu */
 }
 
 .navbar.scrolled {
   background-color: rgba(10, 10, 10, 0.98);
   backdrop-filter: blur(8px);
   padding: 16px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Navbar background when menu is open */
+.navbar.menu-open {
+  background-color: rgba(10, 10, 10, 0.98);
+  backdrop-filter: blur(8px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -67,6 +74,7 @@ body {
   display: inline-block;
 }
 
+/* Menu desktop */
 .nav-menu {
   display: flex;
   list-style: none;
@@ -110,6 +118,7 @@ body {
   display: none;
   flex-direction: column;
   cursor: pointer;
+  z-index: 1001; /* lebih tinggi dari navbar untuk mudah diklik */
 }
 
 .hamburger .bar {
@@ -173,7 +182,7 @@ body {
   position: relative;
   display: inline-block;
   width: 100%;
-  min-width: 300px; /* ensures container is wide enough */
+  min-width: 300px;
   height: 1.2em;
   line-height: 1.2;
   overflow: hidden;
@@ -188,7 +197,7 @@ body {
   text-align: center;
   opacity: 0;
   transform: translateX(100%);
-  transition: none; /* will be animated via keyframes */
+  transition: none;
   background: linear-gradient(90deg, #fff, #ffd700, #fff);
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -482,12 +491,11 @@ body {
   overflow-y: auto;
   text-align: left;
   padding: 30px;
-  /* Hide scrollbar but keep functionality */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 .flip-card-back::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: none;
 }
 
 .flip-content {
@@ -565,7 +573,7 @@ body {
   transform: translateY(-10px) scale(1.03);
   border-color: #fff;
   box-shadow: 0 20px 30px -10px rgba(255, 255, 255, 0.15);
-  animation: none; /* pause pulse on hover for cleaner effect */
+  animation: none;
 }
 
 .policy-icon {
@@ -932,29 +940,36 @@ body {
 }
 
 @media (max-width: 768px) {
-  /* Mobile menu – slide down from top */
+  /* Mobile menu – slide down from above, stays behind navbar */
   .nav-menu {
     position: fixed;
-    top: -100%;
+    top: 0;
     left: 0;
     width: 100%;
     flex-direction: column;
     background-color: #0b0b0b;
     text-align: center;
-    transition: top 0.3s ease-in-out;
-    padding: 30px 0;
+    padding: 80px 0 30px 0; /* padding-top 80px supaya konten bermula di bawah navbar */
     gap: 20px;
     border-bottom: 1px solid #222;
     backdrop-filter: blur(10px);
-    z-index: 999;
+    z-index: 999; /* di bawah navbar */
+    transform: translateY(-100%);
+    transition: transform 0.3s ease-in-out;
   }
 
   .nav-menu.active {
-    top: 80px; /* below navbar */
+    transform: translateY(0);
+  }
+
+  /* Pastikan item menu tidak tersembunyi di belakang navbar */
+  .nav-menu li {
+    width: 100%;
   }
 
   .hamburger {
     display: flex;
+    z-index: 1001;
   }
 
   .hero-title {
@@ -981,7 +996,6 @@ body {
     height: 500px;
   }
 
-  /* Ensure rotating text container is wide enough on mobile */
   .rotating-text-wrapper {
     min-width: 280px;
   }

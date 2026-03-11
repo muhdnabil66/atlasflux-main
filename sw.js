@@ -14,7 +14,6 @@ const urlsToCache = [
 ];
 
 self.addEventListener("install", (event) => {
-  // Paksa service worker baru untuk terus aktif tanpa menunggu
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -35,7 +34,6 @@ self.addEventListener("fetch", (event) => {
 });
 
 self.addEventListener("activate", (event) => {
-  // Bersihkan cache lama dan ambil alih semua klien (tab/window) dengan segera
   event.waitUntil(
     caches
       .keys()

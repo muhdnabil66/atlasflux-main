@@ -10,7 +10,7 @@ const policyText = document.getElementById("policy-text");
 // Store scroll position when leaving home
 let homeScrollPosition = 0;
 
-// Content for each page (same as before)
+// Content for each page
 const pages = {
   about: `
         <h1>About AtlasFlux</h1>
@@ -123,7 +123,6 @@ const pages = {
 };
 
 function showPage(pageId) {
-  // Save scroll position before leaving home
   if (mainContent.style.display !== "none") {
     homeScrollPosition = window.scrollY;
   }
@@ -131,14 +130,11 @@ function showPage(pageId) {
   policyContent.style.display = "block";
   policyText.innerHTML = pages[pageId] || "<h1>Page not found</h1>";
   history.pushState({ page: pageId }, "", `/${pageId}`);
-  // Update active class
   document.querySelectorAll(".nav-link").forEach((link) => {
     link.classList.remove("active");
     if (link.dataset.page === pageId) link.classList.add("active");
   });
-  // Smooth scroll to top
   window.scrollTo({ top: 0, behavior: "smooth" });
-  // If contact page, attach form handler
   if (pageId === "contact") {
     attachContactForm();
   }
@@ -152,13 +148,10 @@ function showHome() {
     link.classList.remove("active");
     if (link.dataset.page === "home") link.classList.add("active");
   });
-  // Smooth scroll to saved position
   window.scrollTo({ top: homeScrollPosition, behavior: "smooth" });
-  // Re-run scroll animations
   animateOnScroll();
 }
 
-// Contact form handler
 function attachContactForm() {
   const form = document.getElementById("contact-form");
   if (!form) return;
@@ -176,7 +169,6 @@ function attachContactForm() {
         "FYRViqFN2k-AxknhK",
       );
       if (result.text === "OK") {
-        // Show success modal
         showSuccessModal();
         form.reset();
       }
@@ -211,7 +203,6 @@ function showSuccessModal() {
   }, 2500);
 }
 
-// Event listeners for all links with data-page
 document.querySelectorAll("[data-page]").forEach((link) => {
   link.addEventListener("click", (e) => {
     e.preventDefault();
@@ -224,13 +215,11 @@ document.querySelectorAll("[data-page]").forEach((link) => {
   });
 });
 
-// Back button
 document.getElementById("back-to-main").addEventListener("click", (e) => {
   e.preventDefault();
   showHome();
 });
 
-// Handle browser back/forward with smooth scroll
 window.addEventListener("popstate", (event) => {
   if (event.state && event.state.page) {
     if (event.state.page === "home") {
@@ -243,7 +232,6 @@ window.addEventListener("popstate", (event) => {
   }
 });
 
-// Navbar background on scroll
 const navbar = document.getElementById("navbar");
 window.addEventListener("scroll", () => {
   if (window.scrollY > 50) {
@@ -253,23 +241,24 @@ window.addEventListener("scroll", () => {
   }
 });
 
-// Mobile menu toggle (slide down)
+// Mobile menu toggle – hanya pada click hamburger
 const hamburger = document.querySelector(".hamburger");
 const navMenu = document.querySelector(".nav-menu");
 
 hamburger.addEventListener("click", () => {
   hamburger.classList.toggle("active");
   navMenu.classList.toggle("active");
+  navbar.classList.toggle("menu-open");
 });
 
 document.querySelectorAll(".nav-link").forEach((link) => {
   link.addEventListener("click", () => {
     hamburger.classList.remove("active");
     navMenu.classList.remove("active");
+    navbar.classList.remove("menu-open");
   });
 });
 
-// Intersection Observer for scroll animations (both ways)
 function animateOnScroll() {
   const animatedElements = document.querySelectorAll(
     ".animate-on-scroll, .slide-left, .slide-right",
@@ -290,7 +279,6 @@ function animateOnScroll() {
 }
 animateOnScroll();
 
-// ========== Flip Card Observer (70% threshold) ==========
 const flipCard = document.getElementById("flipCard");
 if (flipCard) {
   const observer = new IntersectionObserver(
@@ -308,21 +296,17 @@ if (flipCard) {
   observer.observe(flipCard);
 }
 
-// ========== Rotating Hero Phrases (slide right) ==========
 const phrases = document.querySelectorAll(".rotating-phrase");
 let currentIndex = 0;
 
-// Initially set the first phrase as active (it already has class 'active')
 function rotatePhrase() {
   phrases[currentIndex].classList.remove("active");
   currentIndex = (currentIndex + 1) % phrases.length;
   phrases[currentIndex].classList.add("active");
 }
 
-// Start rotation every 6 seconds (matches keyframe duration)
 setInterval(rotatePhrase, 6000);
 
-// ========== Cookie Consent ==========
 function getCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -340,7 +324,6 @@ const cookieBanner = document.getElementById("cookie-banner");
 const acceptBtn = document.getElementById("cookie-accept");
 const rejectBtn = document.getElementById("cookie-reject");
 
-// Show banner if no consent cookie
 if (cookieBanner && !getCookie("cookieConsent")) {
   cookieBanner.style.display = "block";
 }
@@ -359,7 +342,6 @@ if (rejectBtn) {
   });
 }
 
-// Make links inside banner work with SPA
 document.querySelectorAll("#cookie-banner a[data-page]").forEach((link) => {
   link.addEventListener("click", (e) => {
     e.preventDefault();
