@@ -10,7 +10,7 @@ const policyText = document.getElementById("policy-text");
 // Store scroll position when leaving home
 let homeScrollPosition = 0;
 
-// Content for each page (new texts provided)
+// Content for each page (same as before)
 const pages = {
   about: `
         <h1>About AtlasFlux</h1>
@@ -253,7 +253,7 @@ window.addEventListener("scroll", () => {
   }
 });
 
-// Mobile menu toggle
+// Mobile menu toggle (slide down)
 const hamburger = document.querySelector(".hamburger");
 const navMenu = document.querySelector(".nav-menu");
 
@@ -290,4 +290,80 @@ function animateOnScroll() {
 }
 animateOnScroll();
 
-// ========== (Removed flip card modal) ==========
+// ========== Flip Card Observer (70% threshold) ==========
+const flipCard = document.getElementById("flipCard");
+if (flipCard) {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          flipCard.classList.add("flipped");
+        } else {
+          flipCard.classList.remove("flipped");
+        }
+      });
+    },
+    { threshold: 0.7 },
+  );
+  observer.observe(flipCard);
+}
+
+// ========== Rotating Hero Phrases (slide right) ==========
+const phrases = document.querySelectorAll(".rotating-phrase");
+let currentIndex = 0;
+
+// Initially set the first phrase as active (it already has class 'active')
+function rotatePhrase() {
+  phrases[currentIndex].classList.remove("active");
+  currentIndex = (currentIndex + 1) % phrases.length;
+  phrases[currentIndex].classList.add("active");
+}
+
+// Start rotation every 6 seconds (matches keyframe duration)
+setInterval(rotatePhrase, 6000);
+
+// ========== Cookie Consent ==========
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(";").shift();
+}
+
+function setCookie(name, value, days) {
+  const date = new Date();
+  date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+  const expires = "; expires=" + date.toUTCString();
+  document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}
+
+const cookieBanner = document.getElementById("cookie-banner");
+const acceptBtn = document.getElementById("cookie-accept");
+const rejectBtn = document.getElementById("cookie-reject");
+
+// Show banner if no consent cookie
+if (cookieBanner && !getCookie("cookieConsent")) {
+  cookieBanner.style.display = "block";
+}
+
+if (acceptBtn) {
+  acceptBtn.addEventListener("click", () => {
+    setCookie("cookieConsent", "accepted", 365);
+    cookieBanner.style.display = "none";
+  });
+}
+
+if (rejectBtn) {
+  rejectBtn.addEventListener("click", () => {
+    setCookie("cookieConsent", "rejected", 365);
+    cookieBanner.style.display = "none";
+  });
+}
+
+// Make links inside banner work with SPA
+document.querySelectorAll("#cookie-banner a[data-page]").forEach((link) => {
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
+    const page = link.dataset.page;
+    showPage(page);
+  });
+});
