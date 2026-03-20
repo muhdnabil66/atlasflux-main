@@ -14,98 +14,127 @@ let homeScrollPosition = 0;
 const pages = {
   about: `
         <h1>About AtlasFlux</h1>
-        <h2>The Architecture of Next-Generation Intelligence</h2>
-        <p>AtlasFlux is a sophisticated digital ecosystem engineered to redefine the intersection of Artificial Intelligence and technical education. Founded as a high-performance technological project, AtlasFlux operates as a unified hub for innovation, providing users with the tools necessary to navigate the rapidly evolving landscape of 2026.</p>
-        <p>Our infrastructure is built upon two core pillars:</p>
+        <h2>The Vision of a Solo Developer</h2>
+        <p>AtlasFlux is a personal project born from my passion for software development and artificial intelligence. I am Muhd Nabil, a self‑taught developer from Malaysia with a non‑technical academic background. This ecosystem represents my journey to explore how modern AI, cloud infrastructure, and good engineering practices can come together to create something valuable for the community.</p>
+        <p>AtlasFlux is built entirely with the help of AI tools, but every line of code is reviewed, secured, and maintained by me. The platform is not a commercial entity—it’s a laboratory for learning, experimentation, and sharing knowledge.</p>
+        <h2>The Two Pillars</h2>
         <ul>
-            <li><strong>AtlasFlux AI (ai.atlasflux.my):</strong> A high-fidelity interface designed to harness the power of frontier AI models, including OpenAI GPT-5.4 Pro, Claude 4.6 Opus, Deepseek R1 and many more. It provides a seamless environment for complex problem-solving and creative generation.</li>
-            <li><strong>AtlasFlux Academy (learn.atlasflux.my):</strong> A gamified learning platform focused on technical mastery. By implementing XP-based progression and real-time leaderboards, we transform the educational journey into an engaging, high-growth experience.</li>
+            <li><strong>AtlasFlux AI (ai.atlasflux.my):</strong> A playground for frontier AI models. Users get 30 free credits daily to interact with models like OpenAI GPT‑5.4 Pro, Claude 4.6 Opus, DeepSeek R1, and many more. It’s a hands‑on way to experience the state of the art in large language models.</li>
+            <li><strong>AtlasFlux Academy (learn.atlasflux.my):</strong> A gamified learning environment where coding skills are built through interactive tutorials, XP progression, and real‑time leaderboards. It’s designed to make technical education engaging and accessible.</li>
         </ul>
-        <p>AtlasFlux is not merely a website; it is an ongoing engineering endeavor. By integrating industry-standard technologies such as Clerk for identity management, and a robust dual-database architecture using Supabase and Neon, we ensure that our users experience world-class performance and security in every session.</p>
+        <p>This project is my way of giving back to the developer community and demonstrating that with the right tools and dedication, even a solo developer can build something that rivals larger teams.</p>
     `,
   terms: `
         <h1>Terms of Service</h1>
-        <h2>1. Agreement to Terms</h2>
-        <p>By accessing atlasflux.my and its subdomains, you agree to be bound by these Terms of Service. These terms govern your use of the AtlasFlux ecosystem and all associated services.</p>
-        <h2>2. Daily Credit System</h2>
-        <p>AtlasFlux operates on a proprietary Daily Credit System. Users are allocated a specific quota of credits every 24 hours to access AI services. Credits are non-transferable and do not have any monetary value. AtlasFlux reserves the right to adjust daily credit allocations, reset quotas, or limit access to services to maintain system stability and fair usage. There are no financial transactions or paid subscriptions facilitated through this platform.</p>
+        <p><strong>Last updated:</strong> March 20, 2026</p>
+        <h2>1. Acceptance of Terms</h2>
+        <p>By accessing atlasflux.my or any of its subdomains (ai.atlasflux.my, learn.atlasflux.my), you agree to be bound by these Terms of Service. These terms apply to all users of the AtlasFlux ecosystem.</p>
+        <h2>2. Description of Service</h2>
+        <p>AtlasFlux is a personal project that provides access to AI models (via OpenRouter) and educational content. The AI services operate on a Daily Credit System: registered users receive 30 free credits every 24 hours. Each interaction with an AI model costs 2 credits (or 4 credits if DeepSearch is enabled). Credits are non‑transferable and have no monetary value.</p>
         <h2>3. User Conduct and Account Security</h2>
-        <p>Authentication is managed via Clerk. You are responsible for maintaining the security of your account. Any attempt to exploit the credit system, reverse-engineer the API calls, or bypass the daily limits will result in immediate termination of access.</p>
-        <h2>4. Service Availability</h2>
-        <p>As a project in active development, AtlasFlux does not guarantee 100% uptime. Services may be interrupted for maintenance, system updates, or API provider outages.</p>
+        <p>You are responsible for maintaining the security of your account (authentication provided by Clerk). You agree not to misuse the service—this includes attempting to bypass credit limits, reverse‑engineer API calls, or use the platform for illegal activities. I reserve the right to suspend or terminate any account that violates these rules.</p>
+        <h2>4. Service Availability & Liability</h2>
+        <p>As a solo‑developed project, AtlasFlux does not guarantee 100% uptime. Services may be interrupted for maintenance, system updates, or outages of third‑party providers (OpenRouter, Vercel, etc.). I am not liable for any direct or indirect damages arising from your use of the platform. AI outputs may contain errors; you are responsible for verifying critical information.</p>
+        <h2>5. Intellectual Property</h2>
+        <p>The original code, UI design, and the “AtlasFlux” brand are owned by me, Muhd Nabil. Users retain ownership of the content they input. The AI outputs are subject to the license terms of the respective models (see Third‑Party Licenses).</p>
+        <h2>6. Changes to Terms</h2>
+        <p>I may update these terms from time to time. Continued use of the platform after changes constitutes acceptance of the new terms.</p>
+        <h2>7. Governing Law</h2>
+        <p>These terms are governed by the laws of Malaysia.</p>
     `,
   privacy: `
         <h1>Privacy Policy</h1>
-        <h2>1. Data Governance</h2>
-        <p>In alignment with the Personal Data Protection Act (PDPA) 2010 of Malaysia, AtlasFlux is committed to the ethical handling of user data. We prioritize transparency in how your information is stored and processed.</p>
-        <h2>2. Data Infrastructure & Storage</h2>
-        <p>Your data is managed through a multi-layered cloud infrastructure: Identity Management is managed by Clerk, ensuring your login credentials never touch our local servers. Database Management utilizes Supabase and Neon for high-performance data storage. Security is enforced through Supabase Row Level Security (RLS) to ensure that your data is logically isolated and accessible only by you.</p>
-        <h2>3. Information We Collect</h2>
-        <p>We collect minimal data required for service functionality: email addresses for account identification and metadata related to your usage of the Daily Credit System.</p>
-        <h2>4. Data Retention</h2>
-        <p>AtlasFlux retains data only as long as necessary to provide the services. You have the right to request the deletion of your account and associated data at any time through our support channels.</p>
+        <p><strong>Last updated:</strong> March 20, 2026</p>
+        <h2>1. Data Collection</h2>
+        <p>I collect only the data necessary to provide the service:</p>
+        <ul>
+            <li><strong>Account information:</strong> Email address, username (provided via Clerk).</li>
+            <li><strong>Usage data:</strong> AI prompts, responses, credit logs, chat sessions.</li>
+            <li><strong>Technical data:</strong> IP address, browser type (for analytics and security).</li>
+        </ul>
+        <h2>2. How I Use Your Data</h2>
+        <p>Your data is used to operate the service, improve the platform, and prevent abuse. I do not sell or rent your personal information to third parties. Anonymized data may be used for model training or performance analysis.</p>
+        <h2>3. Third‑Party Services</h2>
+        <p>AtlasFlux relies on trusted third‑party providers:</p>
+        <ul>
+            <li><strong>Clerk:</strong> Handles authentication. Your login credentials are stored securely by Clerk.</li>
+            <li><strong>Supabase & Neon:</strong> Store user profiles, chat history, and credit logs.</li>
+            <li><strong>Vercel:</strong> Hosts the web applications.</li>
+            <li><strong>OpenRouter:</strong> Processes AI requests. Your prompts are sent to OpenRouter, which may forward them to model providers under their respective privacy policies.</li>
+        </ul>
+        <h2>4. Data Retention & Your Rights</h2>
+        <p>Your data is retained as long as your account is active. You may request deletion of your account and all associated data by contacting me at support.atlasflux@gmail.com. I will process such requests within a reasonable time.</p>
+        <h2>5. Security</h2>
+        <p>I implement industry‑standard security measures (encryption, access controls) to protect your data. However, no system is 100% secure.</p>
     `,
   disclaimer: `
         <h1>Disclaimer</h1>
-        <h2>Artificial Intelligence Content Disclosure</h2>
-        <p>All content generated, outputted, or displayed through AtlasFlux AI (ai.atlasflux.my) and AtlasFlux Academy (learn.atlasflux.my) is produced by Artificial Intelligence algorithms.</p>
+        <h2>AI Content Disclosure</h2>
+        <p>All content generated by AtlasFlux AI (ai.atlasflux.my) is produced by third‑party large language models accessed through OpenRouter. While I strive to provide accurate and helpful responses, AI models are known to sometimes produce incorrect, misleading, or biased information (often called “hallucinations”).</p>
         <h2>1. Accuracy of Information</h2>
-        <p>While we utilize the most advanced AI models available in 2026, the technology is prone to "hallucinations" or providing outdated and incorrect information. AtlasFlux makes no guarantees regarding the absolute accuracy, completeness, or reliability of any AI-generated content.</p>
+        <p>I make no guarantees regarding the accuracy, completeness, or reliability of any AI‑generated content. You are solely responsible for verifying any information obtained through the platform, especially in technical, legal, or financial contexts.</p>
         <h2>2. User Responsibility</h2>
-        <p>The use of any information provided by AtlasFlux is solely at your own risk. It is the responsibility of the user to cross-reference and verify any critical data, especially in technical, legal, or financial contexts.</p>
+        <p>The use of any information provided by AtlasFlux is at your own risk. I shall not be held liable for any loss, damage, or consequence resulting from decisions made based on AI outputs.</p>
         <h2>3. No Professional Advice</h2>
-        <p>Content provided is for informational and educational purposes only. It does not constitute professional advice. AtlasFlux shall not be held liable for any loss, damage, or consequence resulting from decisions made based on AI-generated outputs.</p>
+        <p>Content provided is for informational and educational purposes only. It does not constitute professional, legal, medical, or financial advice.</p>
     `,
   cookie: `
         <h1>Cookie Policy</h1>
         <h2>1. Use of Cookies</h2>
-        <p>AtlasFlux uses cookies and similar tracking technologies to enhance your browsing experience and maintain your session across our subdomains.</p>
-        <h2>2. Category of Cookies</h2>
+        <p>AtlasFlux uses cookies to enhance your experience, maintain session state, and remember preferences. Cookies are small text files stored on your device by your browser.</p>
+        <h2>2. Types of Cookies</h2>
         <ul>
-            <li><strong>Necessary Cookies:</strong> These are essential for the operation of our site, specifically for Clerk authentication and maintaining your secure login state.</li>
-            <li><strong>Functional Cookies:</strong> These allow the system to remember your preferences, such as your progress in AtlasFlux Academy or your remaining daily AI credits.</li>
-            <li><strong>Analytical Cookies:</strong> Used to monitor system performance and identify technical bottlenecks in our Neon/Supabase database calls.</li>
+            <li><strong>Necessary Cookies:</strong> Essential for authentication (via Clerk) and site security.</li>
+            <li><strong>Functional Cookies:</strong> Remember your preferences, such as your remaining daily credits.</li>
+            <li><strong>Analytical Cookies:</strong> Help me understand how the platform is used to improve performance.</li>
         </ul>
         <h2>3. Managing Cookies</h2>
-        <p>You can choose to disable cookies through your browser settings; however, doing so will prevent you from logging in and accessing the core features of the AtlasFlux ecosystem.</p>
+        <p>You can disable cookies through your browser settings. However, doing so may prevent you from logging in and accessing core features.</p>
     `,
   legal: `
         <h1>Legal & Compliance</h1>
-        <h2>Technological Compliance & Status</h2>
-        <p>AtlasFlux is a non-commercial technological entity dedicated to research and development in the field of AI and education.</p>
-        <ul>
-            <li><strong>Entity Status:</strong> AtlasFlux is not a registered business entity under the Companies Commission of Malaysia (SSM) and does not engage in commercial trading or the sale of services.</li>
-            <li><strong>Intellectual Property:</strong> All original code, UI designs, and the "AtlasFlux" brand identity are protected. Users may not reproduce or distribute any part of the platform without explicit permission.</li>
-            <li><strong>Regulatory Compliance:</strong> We strive to adhere to the Communications and Multimedia Act 1998 (Malaysia), ensuring our platform remains a safe and ethical space for digital innovation.</li>
-        </ul>
+        <h2>Project Status</h2>
+        <p>AtlasFlux is a personal project built by Muhd Nabil, a solo developer. It is not a registered business entity under the Companies Commission of Malaysia (SSM) and does not engage in commercial trading or the sale of services.</p>
+        <h2>Intellectual Property</h2>
+        <p>All original code, UI designs, and the “AtlasFlux” brand are owned by the developer. You may not reproduce or distribute any part of the platform without explicit permission.</p>
+        <h2>Regulatory Compliance</h2>
+        <p>I strive to adhere to the Personal Data Protection Act (PDPA) 2010 of Malaysia and the Communications and Multimedia Act 1998, ensuring a safe and ethical digital space.</p>
     `,
   systems: `
         <h1>Systems Update</h1>
-        <p>We continuously improve our systems to provide better service. Check here for the latest updates, maintenance schedules, and new features.</p>
-        <p><strong>Current Status:</strong> All systems operational. Supabase RLS fully implemented, Neon database optimized.</p>
-        <p>Last update: March 2025</p>
+        <p><strong>Current Status:</strong> All systems operational.</p>
+        <ul>
+            <li>Supabase RLS fully implemented.</li>
+            <li>Neon database optimized.</li>
+            <li>Webhook integration for user profile sync.</li>
+            <li>Daily credit system active.</li>
+        </ul>
+        <p>Last update: March 20, 2026</p>
     `,
   faq: `
         <h1>Frequently Asked Questions</h1>
-        <p><strong>Q: How do I access AI tools?</strong><br>A: Visit ai.atlasflux.my and learn.atlasflux.my to sign up for free.</p>
-        <p><strong>Q: Are coding tutorials free?</strong><br>A: Yes, all tutorials are free. No subscription needed.</p>
-        <p><strong>Q: What is the Daily Credit System?</strong><br>A: Users receive a daily quota of credits to use AI services. Credits reset every 24 hours and are non-transferable.</p>
-        <p><strong>Q: How do I delete my account?</strong><br>A: Contact support via email and we'll assist you.</p>
+        <p><strong>Q: How do I get credits?</strong><br>A: All registered users receive 30 free credits daily. Signing up gives you an extra 15 bonus credits once.</p>
+        <p><strong>Q: Which AI models are available?</strong><br>A: AtlasFlux AI provides access to dozens of models, including OpenAI GPT‑5.4 Pro, Claude 4.6 Opus, DeepSeek R1, Gemini 3.1 Pro, and many free models. The system automatically selects the best model for your request.</p>
+        <p><strong>Q: What is DeepSearch?</strong><br>A: DeepSearch performs web searches and reads pages to provide up‑to‑date information. It costs 2 extra credits (total 4 per message).</p>
+        <p><strong>Q: Can I upload files?</strong><br>A: Yes, you can upload images (up to 20MB) and PDFs (up to 50MB). You can upload up to 5 images per message. No daily limits—only the 2‑credit cost per message applies.</p>
+        <p><strong>Q: How do refunds work?</strong><br>A: If all AI models fail to respond due to an error from OpenRouter, credits are automatically refunded. DeepSearch is not refundable.</p>
+        <p><strong>Q: Is there a free model?</strong><br>A: Yes, many free models are automatically prioritized by the system.</p>
+        <p><strong>Q: How do I delete my account?</strong><br>A: Contact me at support.atlasflux@gmail.com and I’ll assist you.</p>
+        <p><strong>Q: Can I use the service without signing in?</strong><br>A: Yes, guest users can use the service with up to 5 chat sessions stored locally. Credits are managed in your browser.</p>
     `,
   contact: `
         <h1>Contact Us</h1>
-        <h2>Administrative and Technical Inquiries</h2>
-        <p>For support regarding your account, technical feedback, or legal notices, please contact our administrative team.</p>
-        <p><strong>Primary Email:</strong> support.atlasflux@gmail.com</p>
-        <p><strong>System Status:</strong> Updates regarding Supabase RLS implementation and Neon database status can be found on our main landing page.</p>
-        <h3>Digital Ecosystem:</h3>
+        <h2>Get in Touch</h2>
+        <p>If you have any questions, feedback, or need assistance, feel free to reach out. I’ll do my best to respond promptly.</p>
+        <p><strong>Email:</strong> support.atlasflux@gmail.com</p>
+        <p><strong>Digital Ecosystem:</strong></p>
         <ul>
-            <li>Main Portal: <a href="https://atlasflux.my" target="_blank" style="color:#fff;">atlasflux.my</a></li>
-            <li>AI Research: <a href="https://ai.atlasflux.my" target="_blank" style="color:#fff;">ai.atlasflux.my</a></li>
-            <li>Academy: <a href="https://learn.atlasflux.my" target="_blank" style="color:#fff;">learn.atlasflux.my</a></li>
+            <li>Main Portal: <a href="https://atlasflux.my" target="_blank">atlasflux.my</a></li>
+            <li>AI Research: <a href="https://ai.atlasflux.my" target="_blank">ai.atlasflux.my</a></li>
+            <li>Academy: <a href="https://learn.atlasflux.my" target="_blank">learn.atlasflux.my</a></li>
         </ul>
         <div style="margin-top: 40px;">
-            <p>Or send us a message directly:</p>
+            <p>Or send me a message directly:</p>
             <form id="contact-form">
                 <label for="name">Full name</label>
                 <input type="text" name="from_name" id="name" required>
