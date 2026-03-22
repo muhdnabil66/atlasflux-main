@@ -17,10 +17,9 @@ const pages = {
         <h2>The Vision of a Solo Developer</h2>
         <p>AtlasFlux is a personal project born from my passion for software development and artificial intelligence. I am Muhd Nabil, a self‑taught developer from Malaysia with a non‑technical academic background. This ecosystem represents my journey to explore how modern AI, cloud infrastructure, and good engineering practices can come together to create something valuable for the community.</p>
         <p>AtlasFlux is built entirely with the help of AI tools, but every line of code is reviewed, secured, and maintained by me. The platform is not a commercial entity—it’s a laboratory for learning, experimentation, and sharing knowledge.</p>
-        <h2>The Two Pillars</h2>
+        <h2>The Core Service</h2>
         <ul>
             <li><strong>AtlasFlux AI (ai.atlasflux.my):</strong> A playground for frontier AI models. Users get 30 free credits daily to interact with models like OpenAI GPT‑5.4 Pro, Claude 4.6 Opus, DeepSeek R1, and many more. It’s a hands‑on way to experience the state of the art in large language models.</li>
-            <li><strong>AtlasFlux Academy (learn.atlasflux.my):</strong> A gamified learning environment where coding skills are built through interactive tutorials, XP progression, and real‑time leaderboards. It’s designed to make technical education engaging and accessible.</li>
         </ul>
         <p>This project is my way of giving back to the developer community and demonstrating that with the right tools and dedication, even a solo developer can build something that rivals larger teams.</p>
     `,
@@ -28,9 +27,9 @@ const pages = {
         <h1>Terms of Service</h1>
         <p><strong>Last updated:</strong> March 20, 2026</p>
         <h2>1. Acceptance of Terms</h2>
-        <p>By accessing atlasflux.my or any of its subdomains (ai.atlasflux.my, learn.atlasflux.my), you agree to be bound by these Terms of Service. These terms apply to all users of the AtlasFlux ecosystem.</p>
+        <p>By accessing atlasflux.my or its subdomain (ai.atlasflux.my), you agree to be bound by these Terms of Service. These terms apply to all users of the AtlasFlux ecosystem.</p>
         <h2>2. Description of Service</h2>
-        <p>AtlasFlux is a personal project that provides access to AI models (via OpenRouter) and educational content. The AI services operate on a Daily Credit System: registered users receive 30 free credits every 24 hours. Each interaction with an AI model costs 2 credits (or 4 credits if DeepSearch is enabled). Credits are non‑transferable and have no monetary value.</p>
+        <p>AtlasFlux is a personal project that provides access to AI models (via OpenRouter). The AI services operate on a Daily Credit System: registered users receive 30 free credits every 24 hours. Each interaction with an AI model costs 2 credits (or 4 credits if DeepSearch is enabled). Credits are non‑transferable and have no monetary value.</p>
         <h2>3. User Conduct and Account Security</h2>
         <p>You are responsible for maintaining the security of your account (authentication provided by Clerk). You agree not to misuse the service—this includes attempting to bypass credit limits, reverse‑engineer API calls, or use the platform for illegal activities. I reserve the right to suspend or terminate any account that violates these rules.</p>
         <h2>4. Service Availability & Liability</h2>
@@ -131,7 +130,6 @@ const pages = {
         <ul>
             <li>Main Portal: <a href="https://atlasflux.my" target="_blank">atlasflux.my</a></li>
             <li>AI Research: <a href="https://ai.atlasflux.my" target="_blank">ai.atlasflux.my</a></li>
-            <li>Academy: <a href="https://learn.atlasflux.my" target="_blank">learn.atlasflux.my</a></li>
         </ul>
         <div style="margin-top: 40px;">
             <p>Or send me a message directly:</p>

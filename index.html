@@ -10,6 +10,8 @@
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#0b0b0b" />
+    <!-- Canonical URL (HTTPS) -->
+    <link rel="canonical" href="https://atlasflux.my/" />
     <!-- Google Fonts -->
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
@@ -24,6 +26,21 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css" />
+    <!-- Schema Markup (WebSite) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "AtlasFlux",
+        "url": "https://atlasflux.my/",
+        "description": "AtlasFlux is a personal project by a solo developer, offering cutting‑edge AI tools and a playground for frontier AI models.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://atlasflux.my/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
   </head>
   <body>
     <!-- Navbar -->
@@ -61,7 +78,7 @@
           </h1>
           <p class="hero-subtitle animate-on-scroll">
             Empowering the next generation of developers with cutting‑edge AI
-            tools and interactive coding tutorials.
+            tools and interactive experiences.
           </p>
           <div class="hero-buttons animate-on-scroll">
             <a
@@ -69,12 +86,6 @@
               class="btn btn-primary"
               target="_blank"
               >Explore AI</a
-            >
-            <a
-              href="https://learn.atlasflux.my"
-              class="btn btn-secondary"
-              target="_blank"
-              >Start Learning</a
             >
           </div>
         </div>
@@ -98,23 +109,6 @@
               </p>
               <a
                 href="https://ai.atlasflux.my"
-                class="card-link"
-                target="_blank"
-                >Learn more <i class="fas fa-arrow-right"></i
-              ></a>
-            </div>
-            <!-- Learn Coding Card -->
-            <div class="card animate-on-scroll slide-right" id="codingCard">
-              <div class="card-icon-wrapper">
-                <i class="fas fa-code card-icon"></i>
-              </div>
-              <h3>Learn Coding</h3>
-              <p>
-                Master programming through interactive lessons, real‑world
-                projects, and community.
-              </p>
-              <a
-                href="https://learn.atlasflux.my"
                 class="card-link"
                 target="_blank"
                 >Learn more <i class="fas fa-arrow-right"></i
@@ -159,14 +153,11 @@
 
                     <h4>A Solo Developer’s Journey</h4>
                     <p>
-                      This platform is the third major release in the AtlasFlux
-                      ecosystem, following the launches of AtlasFlux AI
-                      (ai.atlasflux.my) and AtlasFlux Learn
-                      (learn.atlasflux.my). Each subdomain represents a
-                      different facet of my passion: AI research and interactive
-                      education. Together, they form a cohesive environment
-                      where I explore what’s possible when one developer
-                      leverages the full power of today’s infrastructure.
+                      This platform is the second major release in the AtlasFlux
+                      ecosystem, following the launch of AtlasFlux AI
+                      (ai.atlasflux.my). It represents my passion for AI
+                      research and my desire to create a professional‑grade
+                      playground for frontier AI models.
                     </p>
 
                     <h4>Why I Built This</h4>
@@ -337,11 +328,6 @@
             <h4>Explore</h4>
             <ul>
               <li><a href="https://ai.atlasflux.my" target="_blank">AI</a></li>
-              <li>
-                <a href="https://learn.atlasflux.my" target="_blank"
-                  >Learn Coding</a
-                >
-              </li>
               <li><a href="#" data-page="about">About</a></li>
               <li><a href="#" data-page="contact">Contact</a></li>
             </ul>
