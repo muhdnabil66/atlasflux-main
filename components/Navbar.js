@@ -48,6 +48,16 @@ export default function Navbar() {
               Contact
             </Link>
           </li>
+          <li>
+            <a
+              href="https://ai.atlasflux.my"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="nav-link"
+            >
+              AI App
+            </a>
+          </li>
         </ul>
         <div className="hamburger" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           <span className="bar"></span>
