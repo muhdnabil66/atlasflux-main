@@ -3,8 +3,8 @@ import Link from "next/link";
 export default function DisclaimerPage() {
   return (
     <div className="policy-container">
-      <div className="policy-text">
-        <Link href="/" className="back-btn">
+      <div className="policy-paper">
+        <Link href="/" className="back-link">
           <i className="fas fa-arrow-left"></i> Back
         </Link>
         <h1>Disclaimer</h1>

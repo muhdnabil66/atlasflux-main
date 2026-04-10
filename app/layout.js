@@ -8,22 +8,22 @@ import ScrollAnimations from "@/components/ScrollAnimations";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "AtlasFlux – Free AI Platform with Grok 4.20 & More",
+  title: "AtlasFlux – Premium AI Ecosystem | Free Daily Credits",
   description:
-    "Access cutting‑edge AI for free: Grok 4.20 Multi‑Agent Beta, GPT‑5.4 Pro, Claude 4.6 Opus, DeepSeek R1, image vision, PDF scanner, and 30+ models. Get 30 daily credits – use for chat, DeepSearch, or image generation (Fast & Cheap 15⚡, Best Quality 30⚡, Ultra 50⚡).",
+    "Experience advanced AI capabilities with transparent credit system. Web research, intelligent coding, file analysis, creative studio, and 30 free daily credits. Built with precision by AtlasFlux.",
   keywords:
-    "AI, Grok, GPT, Claude, DeepSeek, image generation, PDF scanner, free credits",
+    "AI platform, web research, coding assistant, image generation, music generator, free AI credits, Malaysia developer",
   openGraph: {
-    title: "AtlasFlux – Free AI Platform with Grok 4.20 & More",
+    title: "AtlasFlux – Premium AI Ecosystem",
     description:
-      "30 daily credits for chat, DeepSearch, and image generation. Grok 4.20, GPT‑5.4 Pro, Claude 4.6 Opus, DeepSeek R1, image vision, PDF scanner.",
+      "Web research, coding, file analysis, and creative AI tools with 30 free daily credits. Professional-grade, transparent, and built with care.",
     url: "https://atlasflux.my",
     siteName: "AtlasFlux",
     images: [
       {
-        url: "https://atlasflux.my/assets/atlas.png",
-        width: 800,
-        height: 600,
+        url: "https://atlasflux.my/assets/atlas-og.png",
+        width: 1200,
+        height: 630,
       },
     ],
     locale: "en_US",
@@ -47,7 +47,7 @@ export default function RootLayout({ children }) {
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
         />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#0b0b0b" />
+        <meta name="theme-color" content="#030303" />
       </head>
       <body className={inter.className}>
         <Navbar />

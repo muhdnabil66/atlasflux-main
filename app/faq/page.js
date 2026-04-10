@@ -3,69 +3,100 @@ import Link from "next/link";
 export default function FaqPage() {
   return (
     <div className="policy-container">
-      <div className="policy-text">
-        <Link href="/" className="back-btn">
+      <div className="policy-paper">
+        <Link href="/" className="back-link">
           <i className="fas fa-arrow-left"></i> Back
         </Link>
         <h1>Frequently Asked Questions</h1>
-        <p>
-          <strong>Q: How do I get credits?</strong>
-          <br />
-          A: All registered users receive 30 free credits daily. Signing up
-          gives you an extra 15 bonus credits once.
-        </p>
-        <p>
-          <strong>Q: Which AI models are available?</strong>
-          <br />
-          A: AtlasFlux AI provides access to dozens of models, including Grok
-          4.20 Multi‑Agent Beta, GPT‑5.4 Pro, Claude 4.6 Opus, DeepSeek R1,
-          Gemini 3.1 Pro, and many free models. The system automatically selects
-          the best model for your request.
-        </p>
-        <p>
-          <strong>Q: What is DeepSearch?</strong>
-          <br />
-          A: DeepSearch performs web searches and reads pages to provide
-          up‑to‑date information. It costs 2 extra credits (total 4 per
-          message).
-        </p>
-        <p>
-          <strong>Q: Can I generate images?</strong>
-          <br />
-          A: Yes! Three quality modes: Fast & Cheap (15 credits), Best Quality
-          (30 credits), Ultra (50 credits). Ultra supports image‑to‑image
-          editing with compatible Flux models.
-        </p>
-        <p>
-          <strong>Q: Can I upload files?</strong>
-          <br />
-          A: Yes, you can upload images (up to 20MB) and PDFs (up to 50MB). You
-          can upload up to 5 images per message. No daily limits—only the
-          2‑credit cost per message applies.
-        </p>
-        <p>
-          <strong>Q: How do refunds work?</strong>
-          <br />
-          A: If all AI models fail to respond due to an error from OpenRouter,
-          credits are automatically refunded. DeepSearch is not refundable.
-          Image generation refunds happen if all fallback models fail.
-        </p>
-        <p>
-          <strong>Q: Is there a free model?</strong>
-          <br />
-          A: Yes, many free models are automatically prioritized by the system.
-        </p>
-        <p>
-          <strong>Q: How do I delete my account?</strong>
-          <br />
-          A: Contact me at support.atlasflux@gmail.com and I’ll assist you.
-        </p>
-        <p>
-          <strong>Q: Can I use the service without signing in?</strong>
-          <br />
-          A: Yes, guest users can use the service with up to 5 chat sessions
-          stored locally. Credits are managed in your browser.
-        </p>
+
+        <div style={{ marginTop: "2rem" }}>
+          <p>
+            <strong>Q: How do I get more credits?</strong>
+          </p>
+          <p style={{ marginBottom: "1.5rem", color: "var(--text-secondary)" }}>
+            A: Wait for daily reset (30 free), use referral (50 for you, 30 for
+            friend), or purchase credit packs from the Purchase page.
+          </p>
+
+          <p>
+            <strong>Q: Can I use the service without signing in?</strong>
+          </p>
+          <p style={{ marginBottom: "1.5rem", color: "var(--text-secondary)" }}>
+            A: Yes, guest mode works. Your data is stored in your browser.
+            Maximum 5 chat sessions. Some premium features require sign‑in.
+          </p>
+
+          <p>
+            <strong>Q: Why did my image generation fail?</strong>
+          </p>
+          <p style={{ marginBottom: "1.5rem", color: "var(--text-secondary)" }}>
+            A: It could be a temporary issue with the provider. Credits are
+            automatically refunded. Try again later or choose a different
+            quality mode.
+          </p>
+
+          <p>
+            <strong>Q: Are my chat messages private?</strong>
+          </p>
+          <p style={{ marginBottom: "1.5rem", color: "var(--text-secondary)" }}>
+            A: Yes, messages are stored in Supabase with Row Level Security.
+            Only you can access your own data. The developer may view logs for
+            debugging but does not share them.
+          </p>
+
+          <p>
+            <strong>Q: How do I delete my account?</strong>
+          </p>
+          <p style={{ marginBottom: "1.5rem", color: "var(--text-secondary)" }}>
+            A: Contact the developer via the contact form or email
+            support.atlasflux@gmail.com. Account deletion will remove all your
+            data.
+          </p>
+
+          <p>
+            <strong>Q: What is DeepSearch?</strong>
+          </p>
+          <p style={{ marginBottom: "1.5rem", color: "var(--text-secondary)" }}>
+            A: DeepSearch performs web searches and reads pages to provide
+            up‑to‑date information. It costs 2 extra credits (total 4 per
+            message). Sources are displayed after the response.
+          </p>
+
+          <p>
+            <strong>Q: Can I upload files?</strong>
+          </p>
+          <p style={{ marginBottom: "1.5rem", color: "var(--text-secondary)" }}>
+            A: Yes, you can upload images (up to 20MB, max 5 per message) and
+            documents like PDF, DOCX, XLSX (up to 50MB). Text is extracted
+            automatically.
+          </p>
+
+          <p>
+            <strong>Q: How do refunds work?</strong>
+          </p>
+          <p style={{ marginBottom: "1.5rem", color: "var(--text-secondary)" }}>
+            A: If all AI models fail to respond or image generation fails,
+            credits are automatically refunded. You can see this in your Credit
+            Logs.
+          </p>
+
+          <p>
+            <strong>Q: What is the Music Generator?</strong>
+          </p>
+          <p style={{ marginBottom: "1.5rem", color: "var(--text-secondary)" }}>
+            A: Create original songs with AI. Lyrics generation is always free.
+            Audio track generation costs 30–50 credits depending on the model
+            you choose.
+          </p>
+
+          <p>
+            <strong>Q: Do purchased credits expire?</strong>
+          </p>
+          <p style={{ marginBottom: "1.5rem", color: "var(--text-secondary)" }}>
+            A: No. Bonus credits (including purchased packs) never expire. Daily
+            credits reset every 24 hours.
+          </p>
+        </div>
       </div>
     </div>
   );

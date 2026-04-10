@@ -3,13 +3,13 @@ import Link from "next/link";
 export default function PrivacyPage() {
   return (
     <div className="policy-container">
-      <div className="policy-text">
-        <Link href="/" className="back-btn">
+      <div className="policy-paper">
+        <Link href="/" className="back-link">
           <i className="fas fa-arrow-left"></i> Back
         </Link>
         <h1>Privacy Policy</h1>
         <p>
-          <strong>Last updated:</strong> March 30, 2026
+          <strong>Last updated:</strong> April 10, 2026
         </p>
         <h2>1. Data Collection</h2>
         <p>I collect only the data necessary to provide the service:</p>
@@ -20,7 +20,7 @@ export default function PrivacyPage() {
           </li>
           <li>
             <strong>Usage data:</strong> AI prompts, responses, credit logs,
-            chat sessions, generated images.
+            chat sessions, generated images, generated music tracks.
           </li>
           <li>
             <strong>Technical data:</strong> IP address, browser type (for
@@ -38,20 +38,17 @@ export default function PrivacyPage() {
         <p>AtlasFlux relies on trusted third‑party providers:</p>
         <ul>
           <li>
-            <strong>Clerk:</strong> Handles authentication. Your login
-            credentials are stored securely by Clerk.
+            <strong>Clerk:</strong> Handles authentication.
           </li>
           <li>
             <strong>Supabase & Neon:</strong> Store user profiles, chat history,
-            credit logs, and generated images.
+            credit logs, and generated media.
           </li>
           <li>
             <strong>Vercel:</strong> Hosts the web applications.
           </li>
           <li>
-            <strong>OpenRouter & Replicate:</strong> Process AI requests. Your
-            prompts and images are sent to them, which may forward them to model
-            providers under their respective privacy policies.
+            <strong>OpenRouter & Replicate:</strong> Process AI requests.
           </li>
         </ul>
         <h2>4. Data Retention & Your Rights</h2>

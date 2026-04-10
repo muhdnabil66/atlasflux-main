@@ -32,15 +32,15 @@ export default function ContactPage() {
 
   return (
     <div className="policy-container">
-      <div className="policy-text">
-        <Link href="/" className="back-btn">
-          <i className="fas fa-arrow-left"></i> Back
+      <div className="policy-paper">
+        <Link href="/" className="back-link">
+          <i className="fas fa-arrow-left"></i> Back to Home
         </Link>
         <h1>Contact Us</h1>
         <h2>Get in Touch</h2>
         <p>
           If you have any questions, feedback, or need assistance, feel free to
-          reach out. I’ll do my best to respond promptly.
+          reach out. I'll do my best to respond promptly.
         </p>
         <p>
           <strong>Email:</strong> support.atlasflux@gmail.com
@@ -51,13 +51,21 @@ export default function ContactPage() {
         <ul>
           <li>
             Main Portal:{" "}
-            <a href="https://atlasflux.my" target="_blank">
+            <a
+              href="https://atlasflux.my"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               atlasflux.my
             </a>
           </li>
           <li>
             AI Research:{" "}
-            <a href="https://ai.atlasflux.my" target="_blank">
+            <a
+              href="https://ai.atlasflux.my"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               ai.atlasflux.my
             </a>
           </li>
@@ -76,7 +84,7 @@ export default function ContactPage() {
             </button>
           </form>
           {success && (
-            <p style={{ color: "#00aa00", marginTop: 10 }}>
+            <p style={{ color: "#10b981", marginTop: 10 }}>
               ✓ Message sent successfully!
             </p>
           )}

@@ -3,17 +3,17 @@ import Link from "next/link";
 export default function LegalPage() {
   return (
     <div className="policy-container">
-      <div className="policy-text">
-        <Link href="/" className="back-btn">
+      <div className="policy-paper">
+        <Link href="/" className="back-link">
           <i className="fas fa-arrow-left"></i> Back
         </Link>
         <h1>Legal & Compliance</h1>
         <h2>Project Status</h2>
         <p>
-          AtlasFlux is a personal project built by Muhd Nabil, a solo developer.
-          It is not a registered business entity under the Companies Commission
-          of Malaysia (SSM) and does not engage in commercial trading or the
-          sale of services.
+          AtlasFlux is a personal project built by Muhammad Nabil. It is not a
+          registered business entity under the Companies Commission of Malaysia
+          (SSM) and does not engage in commercial trading or the sale of
+          services.
         </p>
         <h2>Intellectual Property</h2>
         <p>
@@ -50,6 +50,34 @@ export default function LegalPage() {
           </a>
           .
         </p>
+        <h2>Policy Summaries</h2>
+        <p>Brief overview of key policies:</p>
+        <ul>
+          <li>
+            <strong>AI Disclaimer:</strong> Use AI at your own risk. Outputs may
+            be inaccurate. Always verify.
+          </li>
+          <li>
+            <strong>Terms & Conditions:</strong> Rules for using the platform
+            and credit system.
+          </li>
+          <li>
+            <strong>Privacy Policy:</strong> What data we collect and how it is
+            used.
+          </li>
+          <li>
+            <strong>Refund Policy:</strong> Automatic refunds for failed
+            generations; no refunds for purchases.
+          </li>
+          <li>
+            <strong>Ban Policy:</strong> Zero tolerance for explicit content,
+            harassment, or abuse.
+          </li>
+          <li>
+            <strong>Image Generation Policy:</strong> Copyright, prohibited
+            content, and moderation.
+          </li>
+        </ul>
       </div>
     </div>
   );

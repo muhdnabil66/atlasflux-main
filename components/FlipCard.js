@@ -36,7 +36,7 @@ export default function FlipCard() {
             <div className="flip-content">
               <h4>About the Developer</h4>
               <p>
-                My name is Muhd Nabil, and I’m a self‑taught developer from
+                My name is Muhammad Nabil, and I’m a self‑taught developer from
                 Malaysia. Coming from a non‑technical academic background, I’ve
                 always been fascinated by the intersection of software and
                 creativity. AtlasFlux is the culmination of that curiosity—a
@@ -44,7 +44,7 @@ export default function FlipCard() {
                 intelligence, modern cloud tools, and countless hours of
                 hands‑on experimentation.
               </p>
-              <h4>A Solo Developer’s Journey</h4>
+              <h4>AtlasFlux’s AI Journey</h4>
               <p>
                 This platform is the second major release in the AtlasFlux
                 ecosystem, following the launch of AtlasFlux AI
