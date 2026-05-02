@@ -1,343 +1,247 @@
-import PricingCards from "@/components/PricingCards";
-import FeatureCards from "@/components/FeatureCards";
+// app/page.js
+"use client";
+import { motion } from "framer-motion";
+import { ContainerScroll } from "@/components/ContainerScroll";
+import HeroAnimation from "@/components/HeroAnimation";
+import NeuralFlow from "@/components/NeuralFlow";
 import Link from "next/link";
-import RotatingIcons from "@/components/RotatingIcons";
+
+const fadeIn = (delay = 0) => ({
+  initial: { opacity: 0, y: 30 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, amount: 0.3 },
+  transition: { delay, duration: 0.6 },
+});
+
+const features = [
+  {
+    icon: "fas fa-brain",
+    title: "200+ AI Models",
+    desc: "Automatic selection across OpenRouter, Replicate & WaveSpeed.",
+  },
+  {
+    icon: "fas fa-globe",
+    title: "DeepSearch & Research",
+    desc: "Live web search with citations, deep research up to 10 pages.",
+  },
+  {
+    icon: "fas fa-microchip",
+    title: "Reasoning & BigT",
+    desc: "Chain‑of‑thought reasoning combined with web search.",
+  },
+  {
+    icon: "fas fa-code",
+    title: "Coding Mode",
+    desc: "Premium programming models for debugging and generation.",
+  },
+  {
+    icon: "fas fa-image",
+    title: "Image & Video Gen",
+    desc: "Hundreds of models for image/video creation, editing, and upscaling.",
+  },
+  {
+    icon: "fas fa-music",
+    title: "Music & Voice Cloning",
+    desc: "Create songs, clone voices in 15 languages, separate audio.",
+  },
+];
+
+const pricing = [
+  {
+    name: "Starter",
+    price: "RM5.99",
+    credits: "350 credits",
+    features: ["One‑time payment", "Never expires", "All tools"],
+    highlight: false,
+  },
+  {
+    name: "Professional",
+    price: "RM10.99",
+    credits: "800 credits",
+    features: ["Best value", "All models & modes", "Instant"],
+    highlight: true,
+  },
+  {
+    name: "Ultimate",
+    price: "RM39.99",
+    credits: "3,500 credits",
+    features: ["Heavy usage", "Discover mode", "More fuel"],
+    highlight: false,
+  },
+];
 
 export default function HomePage() {
   return (
     <>
-      {/* Hero Section */}
-      <section className="hero">
-        <div className="hero-bg"></div>
-        <div className="container hero-container">
-          <div className="hero-content animate-on-scroll visible">
-            <span className="hero-badge">✦ Premium AI Ecosystem</span>
-            <h1 className="hero-title">
-              Intelligence <br />
-              <span className="gradient-text">without limits</span>
-            </h1>
-            <p className="hero-subtitle">
-              30 free daily credits. Web research, intelligent coding, file
-              analysis, and a creative studio — all in one transparent platform.
-            </p>
-            <div className="hero-actions">
-              <a
-                href="https://ai.atlasflux.my"
-                className="btn btn-primary"
-                target="_blank"
-                rel="noopener noreferrer"
+      {/* HERO – ContainerScroll dengan DataFlowAnimation */}
+      <section className="relative pt-24 md:pt-28">
+        <ContainerScroll
+          titleComponent={
+            <div className="space-y-6 px-4">
+              <motion.span
+                {...fadeIn(0)}
+                className="inline-block px-3 py-1 md:px-4 md:py-1.5 rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-md text-white/70 text-xs md:text-sm font-medium"
               >
-                Start Exploring{" "}
-                <i
-                  className="fas fa-arrow-right"
-                  style={{ marginLeft: "8px" }}
-                ></i>
-              </a>
-              <Link href="/#features" className="btn btn-secondary">
-                Discover Features
-              </Link>
+                ✦ 30 Free Daily Credits · 120 Bonus on Sign‑up
+              </motion.span>
+              <motion.h1
+                {...fadeIn(0.1)}
+                className="text-5xl md:text-7xl font-extrabold tracking-tight text-white"
+              >
+                Intelligence{" "}
+                <span className="text-white/40">without limits</span>
+              </motion.h1>
+              <motion.p
+                {...fadeIn(0.2)}
+                className="text-lg md:text-xl text-white/50 max-w-2xl mx-auto"
+              >
+                200+ AI models. Chat, images, video, music, and more. All in one
+                transparent platform.
+              </motion.p>
+              <motion.div
+                {...fadeIn(0.3)}
+                className="flex flex-wrap justify-center gap-4"
+              >
+                <a
+                  href="https://ai.atlasflux.my"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-white text-black font-semibold px-8 py-4 rounded-full hover:bg-neutral-200 transition"
+                >
+                  Start Exploring <i className="fas fa-arrow-right"></i>
+                </a>
+                <Link
+                  href="/#features"
+                  className="inline-flex items-center gap-2 border border-white/20 text-white font-semibold px-8 py-4 rounded-full hover:bg-white/10 transition"
+                >
+                  Discover Features
+                </Link>
+              </motion.div>
             </div>
-          </div>
-          <div className="hero-visual animate-on-scroll">
-            <RotatingIcons />
+          }
+        >
+          {/* Animasi aliran data AI */}
+          <NeuralFlow />
+        </ContainerScroll>
+      </section>
+
+      {/* HERO ANIMATION – Demo interaktif (KOTAK DIBESARKAN) */}
+      <section className="py-16 md:py-24">
+        <div className="container">
+          <motion.div {...fadeIn(0)} className="text-center mb-12 space-y-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-white">
+              See it in <span className="text-white/40">action</span>
+            </h2>
+            <p className="text-lg text-white/40 max-w-2xl mx-auto">
+              Watch how easy it is to chat, generate images, and create videos —
+              all with one platform.
+            </p>
+          </motion.div>
+          <div className="max-w-5xl mx-auto min-h-[650px] md:min-h-[800px] relative rounded-2xl border border-white/10 overflow-hidden shadow-2xl shadow-black/40">
+            <HeroAnimation />
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="section">
+      {/* FEATURES */}
+      <section id="features" className="py-24 md:py-32">
         <div className="container">
-          <div className="section-header animate-on-scroll">
-            <h2 className="section-title">
-              Capabilities that <span className="gradient-text">elevate</span>
+          <motion.div {...fadeIn(0)} className="text-center mb-16 space-y-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-white">
+              Capabilities that <span className="text-white/40">elevate</span>
             </h2>
-            <p className="section-subtitle">
-              No model names. Just powerful features that work.
+            <p className="text-lg text-white/40 max-w-2xl mx-auto">
+              No model names to memorize. Just powerful features that work.
             </p>
-          </div>
-          <FeatureCards />
-        </div>
-      </section>
-
-      {/* AI Chat Section */}
-      <section
-        className="section"
-        style={{ background: "var(--bg-secondary)" }}
-      >
-        <div className="container">
-          <div className="section-header animate-on-scroll">
-            <h2 className="section-title">
-              Intelligent <span className="gradient-text">Conversations</span>
-            </h2>
-            <p className="section-subtitle">
-              Chat with advanced AI, attach files, and get accurate responses.
-            </p>
-          </div>
-
-          <div className="features-grid">
-            <div className="feature-card animate-on-scroll">
-              <div className="feature-icon">
-                <i className="fas fa-comments"></i>
-              </div>
-              <h3 className="feature-title">Smart Chat</h3>
-              <p className="feature-desc">
-                Send messages with automatic model selection. The system picks
-                the best AI for your query, prioritizing free models first.
-              </p>
-            </div>
-            <div className="feature-card animate-on-scroll">
-              <div className="feature-icon">
-                <i className="fas fa-paperclip"></i>
-              </div>
-              <h3 className="feature-title">File Support</h3>
-              <p className="feature-desc">
-                Upload images (vision), PDFs, Word documents, Excel sheets, and
-                text files. Content is extracted and sent to the AI.
-              </p>
-            </div>
-            <div className="feature-card animate-on-scroll">
-              <div className="feature-icon">
-                <i className="fas fa-code"></i>
-              </div>
-              <h3 className="feature-title">Coding Mode</h3>
-              <p className="feature-desc">
-                Optimized for programming tasks. Detects coding keywords and
-                uses high-performance models (10 credits per message).
-              </p>
-            </div>
+          </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {features.map((f, i) => (
+              <motion.div
+                key={i}
+                {...fadeIn(i * 0.1)}
+                className="bg-white/[0.03] border border-white/10 rounded-2xl p-8 hover:border-white/20 backdrop-blur-sm transition"
+              >
+                <div className="text-3xl text-white/40 mb-5">
+                  <i className={f.icon}></i>
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-white">{f.title}</h3>
+                <p className="text-white/40">{f.desc}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Research Section */}
-      <section className="section">
+      {/* PRICING */}
+      <section id="pricing" className="py-24 md:py-32 bg-black/20">
         <div className="container">
-          <div className="section-header animate-on-scroll">
-            <h2 className="section-title">
-              Deep <span className="gradient-text">Research</span>
+          <motion.div {...fadeIn(0)} className="text-center mb-16 space-y-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-white">
+              Simple, <span className="text-white/40">one‑time</span> packs
             </h2>
-            <p className="section-subtitle">
-              Go beyond basic chat with web search and advanced analysis.
+            <p className="text-lg text-white/40 max-w-2xl mx-auto">
+              No subscriptions. Credits never expire. Buy only what you need.
             </p>
-          </div>
-
-          <div className="features-grid">
-            <div className="feature-card animate-on-scroll">
-              <div className="feature-icon">
-                <i className="fas fa-search"></i>
-              </div>
-              <h3 className="feature-title">DeepSearch</h3>
-              <p className="feature-desc">
-                Performs web searches and reads top pages for up-to-date
-                answers. Costs 2 extra credits (total 4). Sources are displayed
-                with links and favicons.
-              </p>
-            </div>
-            <div className="feature-card animate-on-scroll">
-              <div className="feature-icon">
-                <i className="fas fa-microscope"></i>
-              </div>
-              <h3 className="feature-title">Research Mode</h3>
-              <p className="feature-desc">
-                Advanced web search with deeper analysis, reading up to 10
-                sources. Costs 8 credits per message. Ideal for complex topics.
-              </p>
-            </div>
-            <div className="feature-card animate-on-scroll">
-              <div className="feature-icon">
-                <i className="fas fa-undo-alt"></i>
-              </div>
-              <h3 className="feature-title">Automatic Refunds</h3>
-              <p className="feature-desc">
-                If search fails (timeout or no results), extra credits are
-                automatically refunded. Transparent and fair.
-              </p>
-            </div>
+          </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {pricing.map((p, i) => (
+              <motion.div
+                key={i}
+                {...fadeIn(i * 0.1)}
+                className={`bg-white/[0.03] border rounded-2xl p-8 flex flex-col backdrop-blur-sm ${
+                  p.highlight
+                    ? "border-white/20 ring-1 ring-white/10 scale-105"
+                    : "border-white/10"
+                }`}
+              >
+                <h3 className="text-2xl font-bold text-white mb-2">{p.name}</h3>
+                <div className="text-4xl font-extrabold text-white/80 mb-1">
+                  {p.price}
+                </div>
+                <div className="text-white/40 mb-6">{p.credits}</div>
+                <ul className="space-y-3 mb-8 flex-grow">
+                  {p.features.map((f, j) => (
+                    <li
+                      key={j}
+                      className="flex items-center gap-2 text-white/60"
+                    >
+                      <i className="fas fa-check-circle text-white/30"></i> {f}
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href="https://ai.atlasflux.my/purchase"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-center bg-white text-black font-semibold py-3 rounded-full hover:bg-neutral-200 transition"
+                >
+                  Purchase
+                </a>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Transparent Credit Economy */}
-      <section
-        className="section"
-        style={{ background: "var(--bg-secondary)" }}
-      >
-        <div className="container">
-          <div className="section-header animate-on-scroll">
-            <h2 className="section-title">
-              Transparent <span className="gradient-text">credit economy</span>
-            </h2>
-            <p className="section-subtitle">
-              Fair, simple, and generous. No subscriptions, no hidden fees.
-            </p>
-          </div>
-
-          <div className="features-grid">
-            <div className="feature-card animate-on-scroll">
-              <div className="feature-icon">
-                <i className="fas fa-calendar-check"></i>
-              </div>
-              <h3 className="feature-title">30 Daily Credits</h3>
-              <p className="feature-desc">
-                Reset every day at midnight Malaysia Time. Unused credits don't
-                roll over — but you'll always have a fresh start.
-              </p>
-            </div>
-            <div className="feature-card animate-on-scroll">
-              <div className="feature-icon">
-                <i className="fas fa-coins"></i>
-              </div>
-              <h3 className="feature-title">Bonus Credits</h3>
-              <p className="feature-desc">
-                Earn through referrals, sign-up, or purchase packs. Bonus
-                credits never expire and are used after daily credits.
-              </p>
-            </div>
-            <div className="feature-card animate-on-scroll">
-              <div className="feature-icon">
-                <i className="fas fa-undo-alt"></i>
-              </div>
-              <h3 className="feature-title">Automatic Refunds</h3>
-              <p className="feature-desc">
-                If a generation fails due to technical issues, your credits are
-                automatically returned. Full transparency in your credit logs.
-              </p>
-            </div>
-          </div>
-
-          <div style={{ marginTop: "4rem", textAlign: "center" }}>
-            <Link href="/#pricing" className="btn btn-secondary">
-              View Credit Costs{" "}
-              <i
-                className="fas fa-arrow-down"
-                style={{ marginLeft: "8px" }}
-              ></i>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Creative Studio Section */}
-      <section id="studio" className="section">
-        <div className="container">
-          <div className="section-header animate-on-scroll">
-            <h2 className="section-title">
-              Creative <span className="gradient-text">studio</span>
-            </h2>
-            <p className="section-subtitle">
-              Generate images and music with precision control.
-            </p>
-          </div>
-
-          <div className="features-grid">
-            <div className="feature-card animate-on-scroll">
-              <div className="feature-icon">
-                <i className="fas fa-image"></i>
-              </div>
-              <h3 className="feature-title">Image Generation</h3>
-              <p className="feature-desc">
-                Three quality tiers to match your needs: Fast drafts, detailed
-                professional outputs, and ultra‑high‑fidelity with aspect ratio
-                control.
-              </p>
-            </div>
-            <div className="feature-card animate-on-scroll">
-              <div className="feature-icon">
-                <i className="fas fa-arrows-alt"></i>
-              </div>
-              <h3 className="feature-title">Image‑to‑Image</h3>
-              <p className="feature-desc">
-                Upload an existing image as a starting point. The AI will edit,
-                transform, or enhance it based on your prompt.
-              </p>
-            </div>
-            <div className="feature-card animate-on-scroll">
-              <div className="feature-icon">
-                <i className="fas fa-music"></i>
-              </div>
-              <h3 className="feature-title">Music Generator</h3>
-              <p className="feature-desc">
-                Create original songs. Lyrics generation is always free. Turn
-                them into full audio tracks with premium sound models.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section
-        id="pricing"
-        className="section"
-        style={{ background: "var(--bg-secondary)" }}
-      >
-        <div className="container">
-          <div className="section-header animate-on-scroll">
-            <h2 className="section-title">
-              Simple, <span className="gradient-text">one‑time</span> packs
-            </h2>
-            <p className="section-subtitle">
-              No subscriptions. Credits and bundles never expire.
-            </p>
-          </div>
-          <PricingCards />
-          <p
-            style={{
-              textAlign: "center",
-              marginTop: "2rem",
-              color: "var(--text-muted)",
-            }}
-          >
-            All prices in Malaysian Ringgit (MYR). Purchases are non‑refundable.{" "}
-            <Link href="/legal" style={{ color: "var(--accent-gold)" }}>
-              Terms apply
-            </Link>
-            .
+      {/* FINAL CTA */}
+      <section className="py-36 text-center">
+        <motion.div {...fadeIn(0)} className="space-y-8">
+          <h2 className="text-4xl md:text-5xl font-bold text-white">
+            Ready to go <span className="text-white/40">beyond</span>?
+          </h2>
+          <p className="text-lg text-white/40 max-w-xl mx-auto">
+            Join thousands of creators, developers, and curious minds. Your 30
+            free credits are waiting.
           </p>
-        </div>
-      </section>
-
-      {/* Trust & Security */}
-      <section className="section">
-        <div className="container">
-          <div className="section-header animate-on-scroll">
-            <h2 className="section-title">
-              Built on <span className="gradient-text">trust</span>
-            </h2>
-          </div>
-          <div className="features-grid">
-            <div className="feature-card animate-on-scroll">
-              <div className="feature-icon">
-                <i className="fas fa-shield-alt"></i>
-              </div>
-              <h3 className="feature-title">Privacy First</h3>
-              <p className="feature-desc">
-                Your data is stored securely with row‑level security. Never sold
-                to third parties.
-              </p>
-            </div>
-            <div className="feature-card animate-on-scroll">
-              <div className="feature-icon">
-                <i className="fas fa-mobile-alt"></i>
-              </div>
-              <h3 className="feature-title">Install as App</h3>
-              <p className="feature-desc">
-                AtlasFlux is a PWA. Install it on your device for a native
-                app‑like experience.
-              </p>
-            </div>
-            <div className="feature-card animate-on-scroll">
-              <div className="feature-icon">
-                <i className="fas fa-balance-scale"></i>
-              </div>
-              <h3 className="feature-title">Clear Policies</h3>
-              <p className="feature-desc">
-                Transparent terms, privacy, and refund policies. Read them in
-                plain language.
-              </p>
-            </div>
-          </div>
-        </div>
+          <a
+            href="https://ai.atlasflux.my"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-white text-black font-semibold px-10 py-5 rounded-full hover:bg-neutral-200 transition text-lg"
+          >
+            Launch App <i className="fas fa-rocket"></i>
+          </a>
+        </motion.div>
       </section>
     </>
   );
