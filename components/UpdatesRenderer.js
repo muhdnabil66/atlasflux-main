@@ -45,7 +45,7 @@ export default function UpdatesRenderer() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("/api/updates")
+    fetch("https://ai.atlasflux.my/api/updates")
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch");
         return res.json();
