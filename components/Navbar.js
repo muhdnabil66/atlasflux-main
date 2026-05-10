@@ -88,6 +88,7 @@ const NAV_LINKS = [
       },
       { label: "Community", href: "https://ai.atlasflux.my/community" },
       { label: "Features", href: "/#features" },
+      { label: "AI Models", href: "/models" },
     ],
   },
 ];

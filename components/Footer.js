@@ -182,6 +182,14 @@ export default function Footer() {
                 </a>
               </li>
               <li>
+                <Link
+                  href="/models"
+                  className="hover:text-white transition-colors"
+                >
+                  AI Models
+                </Link>
+              </li>
+              <li>
                 <a
                   href="https://ai.atlasflux.my/updates"
                   target="_blank"
