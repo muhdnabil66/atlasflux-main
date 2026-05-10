@@ -9,7 +9,7 @@ export default async function DocsPage() {
   let error = null;
 
   try {
-    const res = await fetch("https://ai.atlasflux.my/api/docs-content", {
+    const res = await fetch("/api/docs-content", {
       next: { revalidate: 3600 },
     });
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
