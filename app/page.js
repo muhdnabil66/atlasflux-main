@@ -1,4 +1,3 @@
-// app/page.js
 "use client";
 import { motion } from "framer-motion";
 import { ContainerScroll } from "@/components/ContainerScroll";
@@ -22,7 +21,7 @@ const features = [
   {
     icon: "fas fa-globe",
     title: "DeepSearch & Research",
-    desc: "Live web search with citations, deep research up to 10 pages.",
+    desc: "Live web search with citations, deep research up to 50 pages.",
   },
   {
     icon: "fas fa-microchip",
@@ -46,34 +45,10 @@ const features = [
   },
 ];
 
-const pricing = [
-  {
-    name: "Starter",
-    price: "RM5.99",
-    credits: "350 credits",
-    features: ["One‑time payment", "Never expires", "All tools"],
-    highlight: false,
-  },
-  {
-    name: "Professional",
-    price: "RM10.99",
-    credits: "800 credits",
-    features: ["Best value", "All models & modes", "Instant"],
-    highlight: true,
-  },
-  {
-    name: "Ultimate",
-    price: "RM39.99",
-    credits: "3,500 credits",
-    features: ["Heavy usage", "Discover mode", "More fuel"],
-    highlight: false,
-  },
-];
-
 export default function HomePage() {
   return (
     <>
-      {/* HERO – ContainerScroll dengan DataFlowAnimation */}
+      {/* HERO – ContainerScroll dengan NeuralFlow */}
       <section className="relative pt-24 md:pt-28">
         <ContainerScroll
           titleComponent={
@@ -120,12 +95,11 @@ export default function HomePage() {
             </div>
           }
         >
-          {/* Animasi aliran data AI */}
           <NeuralFlow />
         </ContainerScroll>
       </section>
 
-      {/* HERO ANIMATION – Demo interaktif (KOTAK DIBESARKAN) */}
+      {/* HERO ANIMATION – Demo interaktif */}
       <section className="py-16 md:py-24">
         <div className="container">
           <motion.div {...fadeIn(0)} className="text-center mb-12 space-y-4">
@@ -172,58 +146,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* PRICING */}
-      <section id="pricing" className="py-24 md:py-32 bg-black/20">
-        <div className="container">
-          <motion.div {...fadeIn(0)} className="text-center mb-16 space-y-4">
-            <h2 className="text-4xl md:text-5xl font-bold text-white">
-              Simple, <span className="text-white/40">one‑time</span> packs
-            </h2>
-            <p className="text-lg text-white/40 max-w-2xl mx-auto">
-              No subscriptions. Credits never expire. Buy only what you need.
-            </p>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {pricing.map((p, i) => (
-              <motion.div
-                key={i}
-                {...fadeIn(i * 0.1)}
-                className={`bg-white/[0.03] border rounded-2xl p-8 flex flex-col backdrop-blur-sm ${
-                  p.highlight
-                    ? "border-white/20 ring-1 ring-white/10 scale-105"
-                    : "border-white/10"
-                }`}
-              >
-                <h3 className="text-2xl font-bold text-white mb-2">{p.name}</h3>
-                <div className="text-4xl font-extrabold text-white/80 mb-1">
-                  {p.price}
-                </div>
-                <div className="text-white/40 mb-6">{p.credits}</div>
-                <ul className="space-y-3 mb-8 flex-grow">
-                  {p.features.map((f, j) => (
-                    <li
-                      key={j}
-                      className="flex items-center gap-2 text-white/60"
-                    >
-                      <i className="fas fa-check-circle text-white/30"></i> {f}
-                    </li>
-                  ))}
-                </ul>
-                <a
-                  href="https://ai.atlasflux.my/purchase"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block text-center bg-white text-black font-semibold py-3 rounded-full hover:bg-neutral-200 transition"
-                >
-                  Purchase
-                </a>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FINAL CTA */}
+      {/* FINAL CTA (tanpa Pricing) */}
       <section className="py-36 text-center">
         <motion.div {...fadeIn(0)} className="space-y-8">
           <h2 className="text-4xl md:text-5xl font-bold text-white">

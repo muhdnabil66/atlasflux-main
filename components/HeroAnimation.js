@@ -497,7 +497,7 @@ function ImageDemo() {
         className="w-full py-2.5 rounded-xl text-sm font-semibold text-white mt-auto"
         style={{ background: `linear-gradient(135deg,${T.purple},#4f46e5)` }}
       >
-        <Wand2 size={14} className="inline mr-2" /> Generate Image · 50 credits
+        <Wand2 size={14} className="inline mr-2" /> Generate Image · RM0.20
       </button>
     </div>
   );
@@ -695,7 +695,7 @@ function VideoDemo() {
         className="w-full py-2.5 rounded-xl text-sm font-semibold text-white mt-auto"
         style={{ background: `linear-gradient(135deg,${T.purple},#4f46e5)` }}
       >
-        <Wand2 size={14} className="inline mr-2" /> Generate Video · 180 credits
+        <Wand2 size={14} className="inline mr-2" /> Generate Video · RM1.28
       </button>
     </div>
   );

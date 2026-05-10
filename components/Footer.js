@@ -1,3 +1,6 @@
+// components/Footer.js
+import Link from "next/link";
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -151,14 +154,12 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a
-                  href="https://ai.atlasflux.my/docs"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href="/docs"
                   className="hover:text-white transition-colors"
                 >
                   Documentation
-                </a>
+                </Link>
               </li>
               <li>
                 <a
@@ -250,20 +251,23 @@ export default function Footer() {
                 </a>
               </li>
               <li>
+                {/* Sebelum ini email, sekarang jadi pautan Support */}
                 <a
-                  href="mailto:support.atlasflux@gmail.com"
+                  href="https://ai.atlasflux.my"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="hover:text-white transition-colors"
                 >
-                  Email Support
+                  Support
                 </a>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Garis pemisah + nama domain + hak cipta */}
-        <div className="border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-neutral-500">
-          <div className="flex flex-wrap gap-1.5 items-center">
+        {/* Garis pemisah + domain + hak cipta (DITENGAHKAN) */}
+        <div className="border-t border-white/10 pt-6 flex flex-col md:flex-row justify-center items-center gap-3 text-xs text-neutral-500 text-center">
+          <div className="flex flex-wrap gap-1.5 items-center justify-center">
             <span>© {currentYear} AtlasFlux.</span>
             <span className="hidden md:inline">·</span>
             <span className="hidden md:inline">
@@ -278,12 +282,6 @@ export default function Footer() {
               className="hover:text-white transition-colors"
             >
               ai.atlasflux.my
-            </a>
-            <a
-              href="mailto:support.atlasflux@gmail.com"
-              className="hover:text-white transition-colors"
-            >
-              support.atlasflux@gmail.com
             </a>
           </div>
         </div>
