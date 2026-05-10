@@ -57,7 +57,7 @@ const NAV_LINKS = [
       { label: "Documentation", href: "/docs" },
       { label: "Analytics", href: "https://ai.atlasflux.my/stats" },
       { label: "Explore Models", href: "https://ai.atlasflux.my/explore" },
-      { label: "Updates", href: "https://ai.atlasflux.my/updates" },
+      { label: "Updates", href: "/updates" },
     ],
   },
   {

@@ -17,6 +17,10 @@ const nextConfig = withPWA({
         source: "/api/models",
         destination: "https://ai.atlasflux.my/api/models",
       },
+      {
+        source: "/api/updates", // ← baru
+        destination: "https://ai.atlasflux.my/api/updates", // ← baru
+      },
     ];
   },
 });

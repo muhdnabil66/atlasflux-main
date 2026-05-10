@@ -190,14 +190,12 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <a
-                  href="https://ai.atlasflux.my/updates"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href="/updates"
                   className="hover:text-white transition-colors"
                 >
                   Updates
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

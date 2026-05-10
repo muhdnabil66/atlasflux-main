@@ -1,345 +1,298 @@
-// components/ModelsRenderer.js
+// components/DocsRenderer.js
 "use client";
 
-import { useState, useMemo } from "react";
-import {
-  Search,
-  X,
-  Zap,
-  FileText,
-  Filter,
-  ChevronDown,
-  Cpu,
-} from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useMemo } from "react";
+import { BookOpen, Shield, Zap, HelpCircle, FileText } from "lucide-react";
 
-// ---------- Helper untuk kos ----------
-function getDisplayCost(model) {
-  if (model.pricingType === "token") {
-    const inputRate = model.inputCreditsPerToken || 0;
-    const outputRate = model.outputCreditsPerToken || 0;
-    const est = (inputRate * 100 + outputRate * 200).toFixed(1);
-    return `~${est} credits / msg`;
-  }
-  if (model.cost) return `${model.cost} credits`;
-  if (model.usdCost) {
-    const myr = (model.usdCost * 3.91 * 1.35).toFixed(2);
-    return `RM ${myr}`;
-  }
-  return "Free";
+// ---------- MAPPING PREFIX KE NAMA PENUH ----------
+const categoryDisplayNames = {
+  intro: "Introduction",
+  gs: "Getting Started",
+  chat: "AI Chat",
+  modes: "Chat Modes",
+  previews: "Code, File & Source Previews",
+  image: "AI Image Generation",
+  video: "Video Generation",
+  tools: "All AI Tools",
+  credit: "Credit System",
+  myr: "MYR Wallet & Pay-As-You-Go",
+  purchase: "Purchases & Credit Packs",
+  referral: "Referral Program",
+  account: "Account & Profile",
+  preferences: "Preferences",
+  security: "Security Settings",
+  archived: "Archived Messages",
+  afcode: "AF Code Library",
+  comm: "Community Forum",
+  models: "Model Catalog & Capabilities",
+  pwa: "PWA Installation",
+  support: "Support",
+  legal: "Legal Policies",
+  updates: "Updates & Changelog",
+  faq: "Frequently Asked Questions",
+  troubleshoot: "Troubleshooting",
+  limitations: "Known Limitations",
+};
+
+// ---------- Helper untuk tentukan ikon kategori ----------
+function getCategoryIcon(category) {
+  const lower = category.toLowerCase();
+  if (lower === "security" || lower === "legal") return <Shield size={20} />;
+  if (lower === "faq" || lower === "support") return <HelpCircle size={20} />;
+  if (lower === "models") return <BookOpen size={20} />;
+  if (lower === "updates") return <FileText size={20} />;
+  return <Zap size={20} />;
 }
 
-// ---------- Helper: provider display ----------
-function getDisplayProvider(model) {
-  const provider = model.provider || "";
-  if (
-    provider.includes("/") ||
-    provider.toLowerCase() === "replicate" ||
-    [
-      "lucataco",
-      "cjwbw",
-      "xinntao",
-      "tencentarc",
-      "bria",
-      "nightmareai",
-      "organisciak",
-      "fofr",
-      "datacte",
-      "leonardoai",
-      "wavespeedai",
-      "prunaai",
-      "recraft-ai",
-      "ideogram-ai",
-      "bytedance",
-      "minimax",
-      "kwaivgi",
-      "pixverse",
-      "veed",
-      "arielreplicate",
-    ].some((name) => provider.toLowerCase().includes(name))
-  ) {
-    return "Replicate";
-  }
-  return provider;
+// ---------- Komponen untuk satu seksyen ----------
+function SectionBlock({ title, children, icon }) {
+  return (
+    <div className="border border-white/10 bg-white/[0.03] rounded-xl p-5 backdrop-blur-sm">
+      <div className="flex items-center gap-3 mb-4 border-b border-white/10 pb-3">
+        {icon && <span className="text-purple-400">{icon}</span>}
+        <h2 className="text-xl font-bold text-white">{title}</h2>
+      </div>
+      <div className="space-y-4">{children}</div>
+    </div>
+  );
 }
 
-// ---------- Helper: kategori model ----------
-function getCategory(model) {
-  const type = model.type?.toLowerCase() || "";
-  const id = model.id?.toLowerCase() || "";
-  if (type === "image") return "Image";
-  if (type === "video" || type === "t2v" || type === "i2v") return "Video";
-  if (id.includes("music") || id.includes("lyria") || type === "audio")
-    return "Audio";
-  if (id.includes("3d") || id.includes("hunyuan-3d") || type === "3d")
-    return "3D";
-  if (
-    id.includes("remove-background") ||
-    id.includes("gfpgan") ||
-    id.includes("real-esrgan") ||
-    id.includes("poster") ||
-    id.includes("fill-pro") ||
-    id.includes("face-restoration") ||
-    id.includes("upscaler") ||
-    id.includes("voice") ||
-    id.includes("xtts") ||
-    id.includes("demucs") ||
-    id.includes("paraphrase") ||
-    id.includes("email") ||
-    id.includes("image-prompt") ||
-    id.includes("sticker") ||
-    id.includes("deoldify")
-  )
-    return "Tools";
-  return "Chat";
-}
-
-// ---------- Komponen Logo ----------
-function ModelLogo({ model, size = 38 }) {
-  const [imgError, setImgError] = useState(false);
-  const logo = model.logo;
-
-  if (!logo || imgError) {
+// ---------- Helper untuk render content (string, array, atau table) ----------
+function renderContent(id, content) {
+  if (typeof content === "string") {
     return (
-      <div
-        className="flex items-center justify-center bg-purple-500/10 border border-purple-500/30 text-purple-400 font-bold flex-shrink-0"
-        style={{ width: size, height: size, fontSize: size * 0.35 }}
-      >
-        {model.name?.charAt(0).toUpperCase() || "?"}
+      <p className="text-gray-300 text-sm whitespace-pre-line">{content}</p>
+    );
+  }
+
+  if (!Array.isArray(content)) {
+    // fallback: objek yang bukan array
+    return <p className="text-gray-300 text-sm">{JSON.stringify(content)}</p>;
+  }
+
+  // Array kosong
+  if (content.length === 0) {
+    return <p className="text-gray-500 text-sm italic">— Empty —</p>;
+  }
+
+  // Tentukan kalau array of objects dan ada struktur tertentu
+  const firstItem = content[0];
+  if (typeof firstItem !== "object" || firstItem === null) {
+    // Array of primitives (string/number)
+    return (
+      <ul className="list-disc list-inside text-gray-300 space-y-1 text-sm">
+        {content.map((item, i) => (
+          <li key={i}>{String(item)}</li>
+        ))}
+      </ul>
+    );
+  }
+
+  // ---- TABLE: FAQ (ada q, a) ----
+  if (firstItem.q !== undefined && firstItem.a !== undefined) {
+    return (
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm text-left border-collapse">
+          <thead>
+            <tr className="border-b border-gray-700">
+              <th className="py-2 pr-4 font-semibold text-purple-400 w-1/3">
+                Question
+              </th>
+              <th className="py-2 font-semibold text-purple-400">Answer</th>
+            </tr>
+          </thead>
+          <tbody>
+            {content.map((item, i) => (
+              <tr key={i} className="border-b border-gray-800">
+                <td className="py-2 pr-4 text-white font-medium">{item.q}</td>
+                <td className="py-2 text-gray-300">{item.a}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+
+  // ---- TABLE: TOOLS TABLE (ada tool, cost, desc) ----
+  if (firstItem.tool !== undefined) {
+    return (
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm text-left border-collapse">
+          <thead>
+            <tr className="border-b border-gray-700">
+              <th className="py-2 pr-4 font-semibold text-purple-400">Tool</th>
+              <th className="py-2 pr-4 font-semibold text-purple-400">Cost</th>
+              <th className="py-2 font-semibold text-purple-400">
+                Description
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {content.map((item, i) => (
+              <tr key={i} className="border-b border-gray-800">
+                <td className="py-2 pr-4 text-white font-medium">
+                  {item.tool}
+                </td>
+                <td className="py-2 pr-4 text-green-400">{item.cost}</td>
+                <td className="py-2 text-gray-300">{item.desc}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+
+  // ---- TABLE: MODEL LIST (ada name, use) ----
+  if (firstItem.name !== undefined && firstItem.use !== undefined) {
+    return (
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm text-left border-collapse">
+          <thead>
+            <tr className="border-b border-gray-700">
+              <th className="py-2 pr-4 font-semibold text-purple-400">Model</th>
+              <th className="py-2 font-semibold text-purple-400">Use Case</th>
+            </tr>
+          </thead>
+          <tbody>
+            {content.map((item, i) => (
+              <tr key={i} className="border-b border-gray-800">
+                <td className="py-2 pr-4 text-white font-medium">
+                  {item.name}
+                </td>
+                <td className="py-2 text-gray-300">{item.use}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+
+  // ---- TABLE: PURCHASE PACKS (array of strings) ----
+  // atau array objek lain yang kita tak kenal pasti, fallback ke list biasa
+  return (
+    <ul className="list-disc list-inside text-gray-300 space-y-1 text-sm">
+      {content.map((item, i) => (
+        <li key={i}>
+          {typeof item === "object"
+            ? Object.entries(item)
+                .map(([k, v]) => `${k}: ${v}`)
+                .join(" | ")
+            : String(item)}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+// ---------- Subseksyen ----------
+function SubSection({ id, title, content }) {
+  return (
+    <div id={id} className="pl-2">
+      {title && (
+        <h3 className="text-sm font-semibold text-purple-400 mb-2 capitalize">
+          {title.replace(/_/g, " ")}
+        </h3>
+      )}
+      {renderContent(id, content)}
+    </div>
+  );
+}
+
+// ---------- Komponen Utama ----------
+export default function DocsRenderer({ data }) {
+  const categories = useMemo(() => {
+    if (!data) return [];
+    const map = new Map();
+    const keys = Object.keys(data).filter((k) => k !== "last_updated");
+
+    // Urutan kategori yang kita mahu
+    const desiredOrder = [
+      "intro",
+      "gs",
+      "chat",
+      "modes",
+      "previews",
+      "image",
+      "video",
+      "tools",
+      "credit",
+      "myr",
+      "purchase",
+      "referral",
+      "account",
+      "preferences",
+      "security",
+      "archived",
+      "afcode",
+      "comm",
+      "models",
+      "pwa",
+      "support",
+      "legal",
+      "updates",
+      "faq",
+      "troubleshoot",
+      "limitations",
+    ];
+
+    for (const key of keys) {
+      const prefix = key.split("_")[0].toLowerCase();
+      if (!map.has(prefix)) map.set(prefix, []);
+      map.get(prefix).push({ key, value: data[key] });
+    }
+
+    const result = [];
+    for (const prefix of desiredOrder) {
+      if (map.has(prefix)) {
+        result.push({ category: prefix, items: map.get(prefix) });
+        map.delete(prefix);
+      }
+    }
+    // Yang tertinggal
+    for (const [prefix, items] of map) {
+      result.push({ category: prefix, items });
+    }
+    return result;
+  }, [data]);
+
+  if (!data) {
+    return (
+      <div className="flex justify-center py-20">
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-white/20 border-t-white" />
       </div>
     );
   }
 
   return (
-    <img
-      src={logo}
-      alt={model.name}
-      onError={() => setImgError(true)}
-      className="object-contain bg-white/5 flex-shrink-0"
-      style={{ width: size, height: size }}
-    />
-  );
-}
+    <div className="space-y-8">
+      {data.last_updated && (
+        <p className="text-sm text-gray-400 italic border-b border-white/10 pb-4">
+          {data.last_updated}
+        </p>
+      )}
 
-// ---------- Kategori untuk tapisan ----------
-const CATEGORIES = ["All", "Chat", "Image", "Video", "Audio", "3D", "Tools"];
-
-// ---------- Komponen Utama ----------
-export default function ModelsRenderer({ data }) {
-  const [search, setSearch] = useState("");
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [selectedProvider, setSelectedProvider] = useState("All");
-  const [showFilters, setShowFilters] = useState(false);
-
-  // Senarai provider unik
-  const providers = useMemo(() => {
-    const set = new Set();
-    data.forEach((m) => set.add(getDisplayProvider(m)));
-    return ["All", ...Array.from(set).sort()];
-  }, [data]);
-
-  // Tapis model
-  const filteredModels = useMemo(() => {
-    let models = [...data];
-
-    // Kategori
-    if (activeCategory !== "All") {
-      models = models.filter((m) => getCategory(m) === activeCategory);
-    }
-
-    // Carian
-    if (search.trim()) {
-      const q = search.toLowerCase();
-      models = models.filter(
-        (m) =>
-          m.name?.toLowerCase().includes(q) ||
-          m.id?.toLowerCase().includes(q) ||
-          m.provider?.toLowerCase().includes(q) ||
-          m.openRouterDescription?.toLowerCase().includes(q) ||
-          m.descriptionEn?.toLowerCase().includes(q),
-      );
-    }
-
-    // Provider
-    if (selectedProvider !== "All") {
-      models = models.filter((m) => getDisplayProvider(m) === selectedProvider);
-    }
-
-    return models;
-  }, [data, activeCategory, search, selectedProvider]);
-
-  return (
-    <div className="space-y-6">
-      {/* ===== BAR CARIAN ===== */}
-      <div className="relative">
-        <Search
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-          size={16}
-        />
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search models..."
-          className="w-full pl-10 pr-10 py-3 border border-white/10 bg-white/5 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition"
-        />
-        {search && (
-          <button
-            onClick={() => setSearch("")}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+      {categories.map(({ category, items }) => {
+        const displayName = categoryDisplayNames[category] || category;
+        return (
+          <SectionBlock
+            key={category}
+            title={displayName}
+            icon={getCategoryIcon(category)}
           >
-            <X size={16} />
-          </button>
-        )}
-      </div>
+            {items.map(({ key, value }) => (
+              <SubSection key={key} id={key} title={key} content={value} />
+            ))}
+          </SectionBlock>
+        );
+      })}
 
-      {/* ===== TAB KATEGORI ===== */}
-      <div className="flex border-b border-white/10 overflow-x-auto">
-        {CATEGORIES.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setActiveCategory(cat)}
-            className={`px-4 py-3 text-sm font-semibold border-b-2 whitespace-nowrap transition ${
-              activeCategory === cat
-                ? "border-purple-500 text-purple-400"
-                : "border-transparent text-gray-400 hover:text-gray-200"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
-
-      {/* ===== BUTANG TAPISAN PROVIDER ===== */}
-      <div>
-        <button
-          onClick={() => setShowFilters(!showFilters)}
-          className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition"
-        >
-          <Filter size={16} />
-          Filters
-          <ChevronDown
-            size={16}
-            className={`transition-transform ${showFilters ? "rotate-180" : ""}`}
-          />
-        </button>
-      </div>
-
-      <AnimatePresence>
-        {showFilters && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden"
-          >
-            <div className="border border-white/10 bg-white/5 p-4 mb-6">
-              <label className="text-xs text-gray-400 block mb-2">
-                Provider
-              </label>
-              <select
-                value={selectedProvider}
-                onChange={(e) => setSelectedProvider(e.target.value)}
-                className="w-full border border-gray-600 bg-gray-900 text-white px-3 py-2 text-sm focus:outline-none focus:border-purple-500/50"
-              >
-                {providers.map((p) => (
-                  <option key={p} value={p}>
-                    {p === "All" ? "All Providers" : p}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* ===== GRID MODEL ===== */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {filteredModels.map((model) => {
-          const desc =
-            model.openRouterDescription ||
-            model.descriptionEn ||
-            model.descriptionMy ||
-            "";
-          const shortDesc = desc.length > 100 ? desc.slice(0, 100) + "…" : desc;
-
-          return (
-            <a
-              key={model.id}
-              href={`https://ai.atlasflux.my/explore/${model.id}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block border border-white/10 bg-white/[0.03] hover:border-gray-500 p-5 transition no-underline"
-            >
-              <div className="flex items-start gap-4">
-                <ModelLogo model={model} size={44} />
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-white truncate">
-                    {model.name}
-                  </h3>
-                  <p className="text-xs text-gray-400">
-                    {getDisplayProvider(model)}
-                  </p>
-
-                  <p className="text-xs text-gray-500 mt-1 line-clamp-2">
-                    {shortDesc}
-                  </p>
-
-                  {/* Metadata tambahan */}
-                  <div className="flex flex-wrap items-center gap-2 mt-2">
-                    {model.contextWindow && (
-                      <span className="text-xs text-gray-500 flex items-center gap-1">
-                        <FileText size={12} />
-                        {model.contextWindow >= 1000
-                          ? `${(model.contextWindow / 1000).toFixed(0)}K`
-                          : model.contextWindow}{" "}
-                        tokens
-                      </span>
-                    )}
-                    {model.capabilities?.vision && (
-                      <span className="text-xs px-1.5 py-0.5 bg-blue-500/10 text-blue-300">
-                        Vision
-                      </span>
-                    )}
-                    {model.capabilities?.functionCalling && (
-                      <span className="text-xs px-1.5 py-0.5 bg-green-500/10 text-green-300">
-                        Tools
-                      </span>
-                    )}
-                    {model.capabilities?.jsonMode && (
-                      <span className="text-xs px-1.5 py-0.5 bg-yellow-500/10 text-yellow-300">
-                        JSON
-                      </span>
-                    )}
-                    {model.supportsNativeWebSearch && (
-                      <span className="text-xs px-1.5 py-0.5 bg-purple-500/10 text-purple-300">
-                        Web Search
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="flex items-center justify-between mt-3">
-                    <span className="flex items-center gap-1 text-sm font-semibold text-purple-400">
-                      <Zap size={14} />
-                      {getDisplayCost(model)}
-                    </span>
-                    <span className="text-xs text-gray-600 font-mono">
-                      {model.id.length > 24
-                        ? model.id.substring(0, 24) + "…"
-                        : model.id}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </a>
-          );
-        })}
-      </div>
-
-      {filteredModels.length === 0 && (
+      {categories.length === 0 && (
         <div className="text-center py-20 text-gray-400">
-          <Cpu size={48} className="mx-auto mb-4 opacity-50" />
-          <p>No models found.</p>
+          <BookOpen size={48} className="mx-auto mb-4 opacity-50" />
+          <p>Documentation is empty.</p>
         </div>
       )}
     </div>
