@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const BASE_URL = "https://ai.atlasflux.my"; // URL aplikasi AI untuk logo
+const BASE_URL = "https://ai.atlasflux.my"; // URL aplikasi AI untuk logo & detail
 
 // ---------- Helper untuk kos ----------
 function getDisplayCost(model) {
@@ -114,7 +114,7 @@ function ModelLogo({ model, size = 38 }) {
 
   return (
     <img
-      src={`${BASE_URL}${logo}`} // <-- gabungkan URL asas dengan laluan relatif
+      src={`${BASE_URL}${logo}`} // gabungkan URL asas dengan laluan relatif
       alt={model.name}
       onError={() => setImgError(true)}
       className="object-contain bg-white/5 flex-shrink-0"
@@ -265,10 +265,18 @@ export default function ModelsRenderer({ data }) {
             "";
           const shortDesc = desc.length > 100 ? desc.slice(0, 100) + "…" : desc;
 
+          // 🔁 Bezakan model MYR (usdCost/prices) vs kredit (credit)
+          const isMYRModel =
+            model.usdCost !== undefined ||
+            (model.prices && model.prices.length > 0);
+          const detailUrl = isMYRModel
+            ? `${BASE_URL}/pricing/models/${model.id}`
+            : `${BASE_URL}/explore/${model.id}`;
+
           return (
             <a
               key={model.id}
-              href={`https://ai.atlasflux.my/explore/${model.id}`}
+              href={detailUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="block border border-white/10 bg-white/[0.03] hover:border-gray-500 p-5 transition no-underline"
