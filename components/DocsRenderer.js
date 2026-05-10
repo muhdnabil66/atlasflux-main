@@ -1,7 +1,7 @@
 // components/DocsRenderer.js
 "use client";
 
-import { useState } from "react";
+import FaqSection from "./FaqSection";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ExternalLink } from "lucide-react";
 
@@ -57,12 +57,6 @@ const ModelItem = ({ name, use }) => (
 
 // Komponen utama
 export default function DocsRenderer({ data }) {
-  const [activeSection, setActiveSection] = useState(null);
-
-  const toggleSection = (id) => {
-    setActiveSection(activeSection === id ? null : id);
-  };
-
   return (
     <div className="space-y-12">
       {/* Introduction */}
@@ -473,39 +467,10 @@ export default function DocsRenderer({ data }) {
         <p className="text-gray-400">{data.updates_desc}</p>
       </section>
 
-      {/* FAQ */}
+      {/* FAQ – GUNAKAN KOMPONEN BERASINGAN */}
       <section id="faq">
         <h2 className="text-3xl font-bold mb-6">{data.faq_title}</h2>
-        <div className="space-y-4">
-          {data.faq.map((item, idx) => (
-            <div
-              key={idx}
-              className="border border-white/10 p-4 rounded-lg cursor-pointer hover:bg-white/5 transition"
-              onClick={() => toggleSection(`faq-${idx}`)}
-            >
-              <div className="flex justify-between items-center">
-                <p className="font-semibold">{item.q}</p>
-                <ChevronDown
-                  size={16}
-                  className={`transform transition-transform ${activeSection === `faq-${idx}` ? "rotate-180" : ""}`}
-                />
-              </div>
-              <AnimatePresence>
-                {activeSection === `faq-${idx}` && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="overflow-hidden"
-                  >
-                    <p className="text-gray-400 mt-3">{item.a}</p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          ))}
-        </div>
+        <FaqSection faqs={data.faq} />
       </section>
 
       {/* Troubleshooting */}
