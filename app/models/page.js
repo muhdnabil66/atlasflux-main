@@ -5,7 +5,10 @@ export const revalidate = 3600;
 
 export default async function ModelsPage() {
   try {
-    const res = await fetch("/api/models", { next: { revalidate: 3600 } });
+    // URL mutlak – server‑to‑server, tiada CORS
+    const res = await fetch("https://ai.atlasflux.my/api/models", {
+      next: { revalidate: 3600 },
+    });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     return (
