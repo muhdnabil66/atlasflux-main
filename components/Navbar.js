@@ -71,13 +71,6 @@ const NAV_SECTIONS = [
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   useEffect(() => {
     if (menuOpen) document.body.style.overflow = "hidden";
@@ -101,27 +94,36 @@ export default function Navbar() {
           />
         </Link>
 
-        {/* Menu toggle */}
+        {/* 2-line hamburger → X simetri */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="w-10 h-10 flex flex-col items-center justify-center gap-1.5 group"
+          className="w-10 h-10 flex items-center justify-center relative"
           aria-label="Toggle menu"
         >
-          <span
-            className={`w-6 h-[2px] bg-[#e8e4dc] transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-[5px]" : ""}`}
-          />
-          <span
-            className={`w-6 h-[2px] bg-[#e8e4dc] transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`}
-          />
-          <span
-            className={`w-6 h-[2px] bg-[#e8e4dc] transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-[5px]" : ""}`}
-          />
+          <div className="w-6 h-[14px] relative flex flex-col justify-between">
+            <motion.span
+              animate={{
+                rotate: menuOpen ? 45 : 0,
+                y: menuOpen ? 6 : 0,
+              }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              className="block w-6 h-[2px] bg-[#e8e4dc] origin-center"
+            />
+            <motion.span
+              animate={{
+                rotate: menuOpen ? -45 : 0,
+                y: menuOpen ? -6 : 0,
+              }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              className="block w-6 h-[2px] bg-[#e8e4dc] origin-center"
+            />
+          </div>
         </button>
 
         {/* Spacer */}
         <div className="flex-1" />
 
-        {/* CTA pill */}
+        {/* CTA vertical */}
         <a
           href="https://ai.atlasflux.my"
           target="_blank"
@@ -144,19 +146,31 @@ export default function Navbar() {
           />
           <span className="font-bold text-sm tracking-tight">AtlasFlux</span>
         </Link>
+
+        {/* 2-line hamburger → X simetri (mobile) */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="w-10 h-10 flex flex-col items-center justify-center gap-1.5"
+          className="w-10 h-10 flex items-center justify-center relative"
+          aria-label="Toggle menu"
         >
-          <span
-            className={`w-5 h-[2px] bg-[#e8e4dc] transition-all ${menuOpen ? "rotate-45 translate-y-[5px]" : ""}`}
-          />
-          <span
-            className={`w-5 h-[2px] bg-[#e8e4dc] transition-all ${menuOpen ? "opacity-0" : ""}`}
-          />
-          <span
-            className={`w-5 h-[2px] bg-[#e8e4dc] transition-all ${menuOpen ? "-rotate-45 -translate-y-[5px]" : ""}`}
-          />
+          <div className="w-[18px] h-[10px] relative flex flex-col justify-between">
+            <motion.span
+              animate={{
+                rotate: menuOpen ? 45 : 0,
+                y: menuOpen ? 4 : 0,
+              }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              className="block w-[18px] h-[2px] bg-[#e8e4dc] origin-center"
+            />
+            <motion.span
+              animate={{
+                rotate: menuOpen ? -45 : 0,
+                y: menuOpen ? -4 : 0,
+              }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              className="block w-[18px] h-[2px] bg-[#e8e4dc] origin-center"
+            />
+          </div>
         </button>
       </nav>
 
