@@ -19,17 +19,34 @@ export default async function ModelsPage() {
 
   if (error || !data.length) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
-        Failed to load models.
+      <div className="min-h-screen bg-[#0c0c0c] text-[#e8e4dc] flex items-center justify-center lg:pl-20">
+        <div className="text-center">
+          <p className="font-mono text-xs text-[#6b6560] uppercase tracking-widest mb-2">
+            Error
+          </p>
+          <p className="text-sm">Failed to load models.</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-black text-white min-h-screen">
-      <div className="max-w-7xl mx-auto px-6 py-16">
-        <h1 className="text-4xl font-bold mb-10">AI Models Directory</h1>
-        {/* USE the component */}
+    <div className="bg-[#0c0c0c] text-[#e8e4dc] min-h-screen lg:pl-20">
+      <div className="px-6 lg:px-16 py-16 lg:py-24 max-w-[1400px]">
+        {/* Header */}
+        <div className="mb-12 lg:mb-16">
+          <span className="font-mono text-xs text-[#6b6560] uppercase tracking-[0.2em] block mb-4">
+            Directory
+          </span>
+          <h1 className="text-4xl lg:text-6xl font-bold tracking-tight mb-4">
+            AI Models
+          </h1>
+          <p className="text-[#6b6560] max-w-md">
+            Browse all available models. Pricing, capabilities, and provider
+            info.
+          </p>
+        </div>
+
         <ModelsRenderer data={data} />
       </div>
     </div>

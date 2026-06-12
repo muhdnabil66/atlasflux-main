@@ -1,773 +1,600 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Send,
-  Image as ImageIcon,
-  Film,
-  Sparkles,
-  FileText,
-  Zap,
-  Globe,
-  Brain,
-  Plus,
-  Settings2,
-  Info,
-  Play,
-  Wand2,
-  X,
-} from "lucide-react";
 
-// ── Teks demo ──
-const CHAT_PROMPT = "Explain quantum computing in simple terms with examples";
+const TABS = [
+  { id: "chat", label: "neural_chat", icon: "◈" },
+  { id: "image", label: "synth_image", icon: "◉" },
+  { id: "video", label: "flux_video", icon: "◆" },
+];
 
-// Reasoning text DIPANJANGKAN
-const CHAT_REASONING =
-  "To explain quantum computing simply, I'll break it down into key concepts: 1) Qubits vs classical bits – classical bits are 0 or 1, but qubits can be both at the same time through superposition. 2) Superposition allows a qubit to exist in multiple states until measured, giving quantum computers exponential parallelism. 3) Entanglement links qubits so the state of one instantly influences another, even across large distances. 4) Quantum gates manipulate qubits through interference, amplifying correct answers and cancelling wrong ones. 5) Real-world examples: Google's Sycamore achieved quantum supremacy in 2019; drug discovery simulations; breaking certain encryption schemes with Shor's algorithm. In simple terms, imagine a classical computer searching a dark room with a flashlight one spot at a time, while a quantum computer turns on all lights simultaneously.";
-
-const CHAT_RESPONSE =
-  "Quantum computing harnesses qubits that can exist in superposition (0 and 1 simultaneously) and entanglement. For example, while a classical computer checks a maze path by path, a quantum computer explores all paths at once. This makes it revolutionary for cryptography, drug discovery, and optimization problems.";
-
-const IMAGE_PROMPT =
-  "A highly detailed, photorealistic portrait of a beautiful young woman...";
-const VIDEO_PROMPT = "group of mafia walking rainy day";
-
-// ── Design tokens ──
-const T = {
-  bg: "#0a0a0a",
-  bgInput: "rgba(255,255,255,0.04)",
-  border: "rgba(255,255,255,0.07)",
-  text: "#f1f5f9",
-  textDim: "rgba(255,255,255,0.5)",
-  textMuted: "rgba(255,255,255,0.3)",
-  purple: "#7c3aed",
-  purpleLight: "#a78bfa",
-  pink: "#ec4899",
-  yellow: "#fbbf24",
+const DEMO_DATA = {
+  chat: {
+    prompt: "Generate a CRISPR sequence for enhanced protein folding",
+    response: [
+      ">> Initializing AtlasFlux neural engine...",
+      ">> Loading bio-informatics module v4.2",
+      ">> Sequence analysis: 2,847 base pairs detected",
+      ">> Optimizing codon usage for E. coli expression",
+      "",
+      "RESULT:",
+      "ATG-GCC-CTG-AAA-GTT-CGA-TAC-CTG-AGC",
+      "GTT-AAA-CCG-TAT-GGC-ATC-CTG-AAC-TGG",
+      ">> Confidence: 94.7%",
+      ">> Folding stability: HIGH",
+      ">> Expression yield: ~340mg/L",
+      "",
+      "[SAVED to /lab/sequences/crispr_001.dna]",
+    ],
+  },
+  image: {
+    prompt: "Synthesize microscopic view of synthetic mitochondria",
+    response: [
+      ">> AtlasFlux Imagen 4 Pro initialized",
+      ">> Loading electron microscopy dataset...",
+      ">> Resolution: 4096x4096 (16K native)",
+      ">> Render mode: Cryo-EM simulation",
+      "",
+      "LAYER 001: Membrane structure ████████░░ 80%",
+      "LAYER 002: Cristae formation  ██████░░░░ 60%",
+      "LAYER 003: ATP synthase array   █████████░ 90%",
+      "LAYER 004: DNA nucleoids        ███████░░░ 70%",
+      "",
+      ">> Post-processing: Chromatic aberration",
+      ">> Color profile: Fluorescent stain (MitoTracker)",
+      "",
+      "[OUTPUT: /lab/images/synth_mito_001.png]",
+    ],
+  },
+  video: {
+    prompt: "Simulate protein folding dynamics over 8 seconds",
+    response: [
+      ">> Seedance 1 Pro | Biophysics mode",
+      ">> Frame buffer: 1920x1080 @ 60fps",
+      ">> Simulation: Molecular dynamics (OpenMM)",
+      "",
+      "FRAME 001/480: Unfolded state (U)",
+      "FRAME 120/480: Transition state (TS) ◄ critical",
+      "FRAME 240/480: Molten globule (MG)",
+      "FRAME 360/480: Native fold (N) ◄ stable",
+      "FRAME 480/480: Equilibrium reached",
+      "",
+      ">> RMSD: 0.34Å (excellent)",
+      ">> Energy landscape: 3 local minima",
+      "",
+      "[OUTPUT: /lab/videos/folding_dynamics_001.mp4]",
+    ],
+  },
 };
 
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+// DNA color tokens
+const C = {
+  bg: "#0a0a0a",
+  bgPanel: "#111111",
+  border: "#2a2a2a",
+  text: "#e8e4dc",
+  textDim: "#6b6560",
+  textMuted: "#3a3a3a",
+  accent: "#E85D04", // Orange primary
+  accentDim: "rgba(232, 93, 4, 0.15)",
+  accentGlow: "rgba(232, 93, 4, 0.4)",
+  secondary: "#00F5D4", // Teal secondary
+  secondaryDim: "rgba(0, 245, 212, 0.1)",
+  error: "#ff3333",
+};
 
-/* ── Chat Demo ── */
-function ChatDemo() {
-  const [step, setStep] = useState("idle");
-  const [typedPrompt, setTypedPrompt] = useState("");
-  const [reasoningText, setReasoningText] = useState("");
-  const [responseText, setResponseText] = useState("");
+// Glitch text component
+function GlitchText({ text, active }) {
+  const [display, setDisplay] = useState(text);
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
 
   useEffect(() => {
-    let active = true;
-    const run = async () => {
-      // Reset
-      setStep("idle");
-      setTypedPrompt("");
-      setReasoningText("");
-      setResponseText("");
-      await delay(600);
-
-      // Taip prompt
-      setStep("typing");
-      for (let i = 0; i <= CHAT_PROMPT.length; i++) {
-        if (!active) return;
-        setTypedPrompt(CHAT_PROMPT.slice(0, i));
-        await delay(35);
+    if (!active) {
+      setDisplay(text);
+      return;
+    }
+    let iterations = 0;
+    const interval = setInterval(() => {
+      setDisplay(
+        text
+          .split("")
+          .map((char, idx) => {
+            if (char === " ") return " ";
+            if (idx < iterations) return text[idx];
+            return chars[Math.floor(Math.random() * chars.length)];
+          })
+          .join(""),
+      );
+      if (iterations >= text.length) {
+        clearInterval(interval);
       }
-      await delay(600);
+      iterations += 1 / 2; // Slow decode
+    }, 30);
+    return () => clearInterval(interval);
+  }, [text, active]);
 
-      // Lampirkan fail
-      setStep("attached");
-      await delay(1000);
+  return <span>{display}</span>;
+}
 
-      // Thinking + globe
-      setStep("thinking");
-      await delay(2500);
-
-      // Reasoning (lebih panjang – teks lebih banyak & sedikit perlahan)
-      setStep("reasoning");
-      for (let i = 0; i <= CHAT_REASONING.length; i++) {
-        if (!active) return;
-        setReasoningText(CHAT_REASONING.slice(0, i));
-        await delay(35); // sedikit perlahan untuk efek lebih jelas
-      }
-      await delay(800);
-
-      // Jawapan (DILAJUKAN)
-      setStep("answering");
-      for (let i = 0; i <= CHAT_RESPONSE.length; i++) {
-        if (!active) return;
-        setResponseText(CHAT_RESPONSE.slice(0, i));
-        await delay(10); // lebih laju (10ms)
-      }
-
-      setStep("done");
-      await delay(5000);
-    };
-    run();
-    const interval = setInterval(run, 26000);
-    return () => {
-      active = false;
-      clearInterval(interval);
-    };
-  }, []);
-
+// Scanline overlay
+function Scanlines() {
   return (
-    <div className="flex flex-col h-full p-3">
-      {/* Header bar */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <div
-            className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium"
-            style={{
-              background: T.bgInput,
-              border: `1px solid ${T.border}`,
-              color: T.textDim,
-            }}
-          >
-            <Zap size={12} style={{ color: T.yellow }} /> 30
-          </div>
-          <div
-            className="flex items-center p-0.5 rounded-lg"
-            style={{ background: T.bgInput, border: `1px solid ${T.border}` }}
-          >
-            <span
-              className="px-2 py-0.5 rounded-md text-[10px] font-medium"
-              style={{ background: "rgba(255,255,255,0.08)", color: T.text }}
-            >
-              Auto
-            </span>
-            <span
-              className="px-2 py-0.5 rounded-md text-[10px]"
-              style={{ color: T.textMuted }}
-            >
-              Manual
-            </span>
-          </div>
-        </div>
-        {(step === "thinking" ||
-          step === "reasoning" ||
-          step === "answering") && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px]"
-            style={{
-              background: "rgba(124,58,237,0.1)",
-              border: "1px solid rgba(124,58,237,0.2)",
-              color: T.purpleLight,
-            }}
-          >
-            <Globe size={11} /> DeepSearch
-          </motion.div>
-        )}
-      </div>
-
-      {/* Chat area */}
-      <div className="flex-1 flex flex-col gap-3 overflow-hidden mb-3">
-        {step !== "idle" && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="self-end max-w-[85%]"
-            style={{
-              background: "rgba(255,255,255,0.06)",
-              border: "1px solid rgba(255,255,255,0.05)",
-              borderRadius: "16px 16px 4px 16px",
-              padding: "10px 14px",
-            }}
-          >
-            <p className="text-sm leading-relaxed" style={{ color: T.text }}>
-              {typedPrompt || " "}
-              {step === "typing" && (
-                <span
-                  className="inline-block w-1.5 h-4 ml-0.5 align-middle animate-pulse"
-                  style={{ background: T.purpleLight }}
-                />
-              )}
-            </p>
-            {step !== "typing" && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                className="mt-2 flex items-center gap-2 px-2.5 py-1.5 rounded-lg"
-                style={{
-                  background: T.bgInput,
-                  border: `1px solid ${T.border}`,
-                }}
-              >
-                <FileText size={14} style={{ color: T.pink }} />
-                <span className="text-xs" style={{ color: T.textDim }}>
-                  research.pdf
-                </span>
-                <X size={12} style={{ color: T.textMuted }} />
-              </motion.div>
-            )}
-          </motion.div>
-        )}
-
-        {(step === "thinking" ||
-          step === "reasoning" ||
-          step === "answering" ||
-          step === "done") && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="self-start max-w-[90%]"
-          >
-            {step === "thinking" && (
-              <div className="flex items-center gap-3 px-4 py-3">
-                <div className="flex items-center space-x-1">
-                  <span className="w-1.5 h-1.5 bg-white/30 rounded-full animate-bounce [animation-delay:-0.3s]" />
-                  <span className="w-1.5 h-1.5 bg-white/30 rounded-full animate-bounce [animation-delay:-0.15s]" />
-                  <span className="w-1.5 h-1.5 bg-white/30 rounded-full animate-bounce" />
-                </div>
-                <span className="text-xs" style={{ color: T.textMuted }}>
-                  Searching the web…
-                </span>
-              </div>
-            )}
-
-            {(step === "reasoning" ||
-              step === "answering" ||
-              step === "done") &&
-              reasoningText && (
-                <div
-                  className="mb-3 p-3 rounded-lg border"
-                  style={{
-                    background: "rgba(234,179,8,0.05)",
-                    borderColor: "rgba(234,179,8,0.2)",
-                    color: "#fbbf24",
-                  }}
-                >
-                  <div className="flex items-center gap-1 mb-2">
-                    <Brain size={12} />
-                    <span className="text-xs font-semibold uppercase tracking-wider text-yellow-500/80">
-                      Reasoning
-                    </span>
-                  </div>
-                  <p className="text-xs leading-relaxed opacity-80">
-                    {reasoningText}
-                    {step === "reasoning" && (
-                      <span className="inline-block w-1.5 h-4 ml-0.5 align-middle bg-yellow-400 animate-pulse" />
-                    )}
-                  </p>
-                </div>
-              )}
-
-            {(step === "answering" || step === "done") && (
-              <div className="px-4 py-3">
-                <p
-                  className="text-sm leading-relaxed"
-                  style={{ color: T.text }}
-                >
-                  {responseText}
-                  {step === "answering" && (
-                    <span className="inline-block w-1.5 h-4 ml-0.5 align-middle bg-purple-400 animate-pulse" />
-                  )}
-                </p>
-                {step === "done" && (
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                    className="text-[10px] italic mt-2"
-                    style={{ color: T.textMuted }}
-                  >
-                    Powered by AtlasFlux AI
-                  </motion.p>
-                )}
-              </div>
-            )}
-          </motion.div>
-        )}
-      </div>
-
-      {/* Input bar */}
-      <div className="flex items-center gap-2 mt-auto">
-        <button
-          className="p-2 rounded-full"
-          style={{
-            background: T.bgInput,
-            border: `1px solid ${T.border}`,
-            color: T.textMuted,
-          }}
-        >
-          <Plus size={16} />
-        </button>
-        <div
-          className="flex-1 flex items-center gap-2 px-4 py-2.5 rounded-2xl"
-          style={{ background: T.bgInput, border: `1px solid ${T.border}` }}
-        >
-          <span className="text-sm flex-1" style={{ color: T.textMuted }}>
-            {step === "idle" ? "Ask anything..." : CHAT_PROMPT}
-          </span>
-          <button
-            className="p-1.5 rounded-lg"
-            style={{
-              background: "rgba(124,58,237,0.15)",
-              color: T.purpleLight,
-            }}
-          >
-            <Send size={14} />
-          </button>
-        </div>
-      </div>
-    </div>
+    <div
+      className="absolute inset-0 pointer-events-none z-20"
+      style={{
+        background:
+          "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px)",
+        backgroundSize: "100% 4px",
+      }}
+    />
   );
 }
 
-/* ── Image Demo ── */
-function ImageDemo() {
-  const [step, setStep] = useState("idle");
-  const [typedPrompt, setTypedPrompt] = useState("");
+// DNA helix decoration
+function DNAHelix({ active }) {
+  const canvasRef = useRef(null);
 
   useEffect(() => {
-    let active = true;
-    const run = async () => {
-      setStep("idle");
-      setTypedPrompt("");
-      await delay(500);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    let frame = 0;
+    let animId;
 
-      setStep("prompt");
-      for (let i = 0; i <= IMAGE_PROMPT.length; i++) {
-        if (!active) return;
-        setTypedPrompt(IMAGE_PROMPT.slice(0, i));
-        await delay(30);
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const w = canvas.width;
+      const h = canvas.height;
+      const strands = 2;
+      const points = 20;
+
+      for (let s = 0; s < strands; s++) {
+        for (let i = 0; i < points; i++) {
+          const y = (i / points) * h;
+          const phase = frame * 0.02 + i * 0.3 + s * Math.PI;
+          const x = w / 2 + Math.sin(phase) * (w * 0.35);
+          const size = 2 + Math.sin(phase) * 1.5;
+
+          ctx.beginPath();
+          ctx.arc(x, y, Math.abs(size), 0, Math.PI * 2);
+          ctx.fillStyle = s === 0 ? C.accent : C.secondary;
+          ctx.globalAlpha = 0.3 + Math.sin(phase) * 0.2;
+          ctx.fill();
+        }
       }
-      await delay(800);
 
-      setStep("generating");
-      await delay(4000);
+      // Connecting bars
+      for (let i = 0; i < points; i++) {
+        const y = (i / points) * h;
+        const phase1 = frame * 0.02 + i * 0.3;
+        const phase2 = frame * 0.02 + i * 0.3 + Math.PI;
+        const x1 = w / 2 + Math.sin(phase1) * (w * 0.35);
+        const x2 = w / 2 + Math.sin(phase2) * (w * 0.35);
 
-      setStep("result");
-      await delay(7000);
+        ctx.beginPath();
+        ctx.moveTo(x1, y);
+        ctx.lineTo(x2, y);
+        ctx.strokeStyle = `rgba(232, 93, 4, ${0.1 + Math.sin(frame * 0.05) * 0.05})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+
+      frame++;
+      animId = requestAnimationFrame(draw);
     };
-    run();
-    const interval = setInterval(run, 22000);
-    return () => {
-      active = false;
-      clearInterval(interval);
-    };
-  }, []);
+
+    draw();
+    return () => cancelAnimationFrame(animId);
+  }, [active]);
 
   return (
-    <div className="flex flex-col h-full p-3">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <div
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium"
-            style={{
-              background: T.bgInput,
-              border: `1px solid ${T.border}`,
-              color: T.textDim,
-            }}
-          >
-            <ImageIcon size={12} style={{ color: T.purpleLight }} /> Imagen 4
-          </div>
-          <div
-            className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium"
-            style={{
-              background: T.bgInput,
-              border: `1px solid ${T.border}`,
-              color: T.yellow,
-            }}
-          >
-            <Zap size={12} /> 50
-          </div>
-        </div>
-        <div
-          className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px]"
-          style={{
-            background: T.bgInput,
-            border: `1px solid ${T.border}`,
-            color: T.textDim,
-          }}
-        >
-          <Settings2 size={11} /> Ultra Quality
-        </div>
-      </div>
-
-      <div
-        className="rounded-xl p-3 mb-3"
-        style={{ background: T.bgInput, border: `1px solid ${T.border}` }}
-      >
-        <textarea
-          readOnly
-          value={typedPrompt}
-          rows={3}
-          className="w-full bg-transparent text-sm leading-relaxed resize-none outline-none"
-          style={{ color: T.text, fontFamily: "'DM Sans',sans-serif" }}
-          placeholder="Describe the image…"
-        />
-        <div className="flex items-center gap-2 mt-2">
-          <span
-            className="text-[10px] px-2 py-0.5 rounded-full"
-            style={{
-              background: T.bgInput,
-              border: `1px solid ${T.border}`,
-              color: T.textDim,
-            }}
-          >
-            Aspect: 3:4
-          </span>
-          <span
-            className="text-[10px] px-2 py-0.5 rounded-full"
-            style={{
-              background: T.bgInput,
-              border: `1px solid ${T.border}`,
-              color: T.textDim,
-            }}
-          >
-            Res: 2K
-          </span>
-          <Info size={11} style={{ color: T.textMuted }} />
-        </div>
-      </div>
-
-      {/* Reference image slots DIKELUARKAN untuk beri lebih ruang kepada output */}
-
-      <div className="flex-1 flex items-center justify-center mb-3 min-h-[250px]">
-        {step === "generating" ? (
-          <div className="flex flex-col items-center gap-4">
-            <div
-              className="w-14 h-14 rounded-2xl border flex items-center justify-center"
-              style={{
-                background: "rgba(124,58,237,0.08)",
-                borderColor: "rgba(124,58,237,0.2)",
-              }}
-            >
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
-              >
-                <Sparkles size={22} style={{ color: T.purpleLight }} />
-              </motion.div>
-            </div>
-            <div className="flex flex-col items-center gap-1">
-              <span className="text-sm" style={{ color: T.textDim }}>
-                Generating your image…
-              </span>
-              <div
-                className="w-40 h-1 rounded-full overflow-hidden"
-                style={{ background: "rgba(255,255,255,0.05)" }}
-              >
-                <motion.div
-                  initial={{ width: "0%" }}
-                  animate={{ width: "100%" }}
-                  transition={{ duration: 4, ease: "easeInOut" }}
-                  className="h-full rounded-full"
-                  style={{
-                    background: `linear-gradient(90deg,${T.purple},${T.pink})`,
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        ) : step === "result" ? (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="w-full h-full rounded-xl overflow-hidden relative border border-white/10"
-          >
-            <img
-              src="/display4.png"
-              alt="Generated portrait"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-              <div className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-purple-500" />
-                <span className="w-2 h-2 rounded-full bg-pink-500" />
-                <span className="text-[10px] text-white/50">2K · PNG</span>
-              </div>
-              <span className="text-[10px] px-2 py-0.5 rounded bg-green-500/10 border border-green-500/20 text-green-400">
-                ✓ Generated
-              </span>
-            </div>
-          </motion.div>
-        ) : (
-          <div className="text-center text-white/30">
-            <ImageIcon size={48} className="mx-auto mb-2 opacity-20" />
-            <p className="text-xs">Your image will appear here</p>
-          </div>
-        )}
-      </div>
-
-      <button
-        className="w-full py-2.5 rounded-xl text-sm font-semibold text-white mt-auto"
-        style={{ background: `linear-gradient(135deg,${T.purple},#4f46e5)` }}
-      >
-        <Wand2 size={14} className="inline mr-2" /> Generate Image · RM0.20
-      </button>
-    </div>
+    <canvas
+      ref={canvasRef}
+      width={80}
+      height={300}
+      className="absolute right-4 top-1/2 -translate-y-1/2 opacity-40"
+    />
   );
 }
 
-/* ── Video Demo ── */
-function VideoDemo() {
-  const [step, setStep] = useState("idle");
-  const [typedPrompt, setTypedPrompt] = useState("");
+// Typing hook with irregular speed
+function useTypewriter(lines, speed = 25, onComplete) {
+  const [displayed, setDisplayed] = useState([]);
+  const [currentLine, setCurrentLine] = useState(0);
+  const [currentChar, setCurrentChar] = useState(0);
+  const [isDone, setIsDone] = useState(false);
 
   useEffect(() => {
-    let active = true;
-    const run = async () => {
-      setStep("idle");
-      setTypedPrompt("");
-      await delay(500);
+    setDisplayed([]);
+    setCurrentLine(0);
+    setCurrentChar(0);
+    setIsDone(false);
+  }, [lines]);
 
-      setStep("prompt");
-      for (let i = 0; i <= VIDEO_PROMPT.length; i++) {
-        if (!active) return;
-        setTypedPrompt(VIDEO_PROMPT.slice(0, i));
-        await delay(35);
-      }
-      await delay(700);
+  useEffect(() => {
+    if (isDone || currentLine >= lines.length) return;
 
-      setStep("generating");
-      await delay(4500);
+    const line = lines[currentLine];
+    if (currentChar >= line.length) {
+      // Line done, move to next
+      const timeout = setTimeout(
+        () => {
+          setDisplayed((prev) => [...prev, line]);
+          setCurrentLine((prev) => prev + 1);
+          setCurrentChar(0);
+        },
+        80 + Math.random() * 120,
+      ); // Irregular pause
+      return () => clearTimeout(timeout);
+    }
 
-      setStep("result");
-      await delay(8000);
-    };
-    run();
-    const interval = setInterval(run, 25000);
-    return () => {
-      active = false;
-      clearInterval(interval);
-    };
-  }, []);
+    // Type next char with irregular speed
+    const delay = speed + (Math.random() - 0.5) * speed * 1.5;
+    const timeout = setTimeout(
+      () => {
+        setCurrentChar((prev) => prev + 1);
+      },
+      Math.max(5, delay),
+    );
 
-  return (
-    <div className="flex flex-col h-full p-3">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <div
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium"
-            style={{
-              background: T.bgInput,
-              border: `1px solid ${T.border}`,
-              color: T.textDim,
-            }}
-          >
-            <Film size={12} style={{ color: T.purpleLight }} /> Seedance 1 Pro
-          </div>
-          <div
-            className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium"
-            style={{
-              background: T.bgInput,
-              border: `1px solid ${T.border}`,
-              color: T.yellow,
-            }}
-          >
-            <Zap size={12} /> 180
-          </div>
-        </div>
-        <div
-          className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px]"
-          style={{
-            background: T.bgInput,
-            border: `1px solid ${T.border}`,
-            color: T.textDim,
-          }}
-        >
-          <span>1080p · 8s</span>
-        </div>
-      </div>
+    return () => clearTimeout(timeout);
+  }, [currentLine, currentChar, lines, speed, isDone]);
 
-      <div className="grid grid-cols-2 gap-2 mb-3">
-        {[
-          ["Resolution", "1080p"],
-          ["Duration", "8s"],
-          ["Aspect Ratio", "16:9"],
-          ["Audio", "Yes"],
-        ].map(([l, v]) => (
-          <div
-            key={l}
-            className="flex items-center justify-between px-3 py-2 rounded-lg"
-            style={{ background: T.bgInput, border: `1px solid ${T.border}` }}
-          >
-            <span className="text-[10px]" style={{ color: T.textMuted }}>
-              {l}
-            </span>
-            <span
-              className="text-[10px] font-medium"
-              style={{ color: T.textDim }}
-            >
-              {v}
-            </span>
-          </div>
-        ))}
-      </div>
+  useEffect(() => {
+    if (currentLine >= lines.length && !isDone) {
+      setIsDone(true);
+      onComplete?.();
+    }
+  }, [currentLine, lines.length, isDone, onComplete]);
 
-      <div
-        className="rounded-xl p-3 mb-3"
-        style={{ background: T.bgInput, border: `1px solid ${T.border}` }}
-      >
-        <textarea
-          readOnly
-          value={typedPrompt}
-          rows={2}
-          className="w-full bg-transparent text-sm leading-relaxed resize-none outline-none"
-          style={{ color: T.text, fontFamily: "'DM Sans',sans-serif" }}
-          placeholder="Describe the video…"
-        />
-      </div>
-
-      <div className="flex-1 flex items-center justify-center mb-3 min-h-[200px]">
-        {step === "generating" ? (
-          <div className="flex flex-col items-center gap-4">
-            <div
-              className="w-14 h-14 rounded-2xl border flex items-center justify-center"
-              style={{
-                background: "rgba(124,58,237,0.08)",
-                borderColor: "rgba(124,58,237,0.2)",
-              }}
-            >
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
-              >
-                <Film size={22} style={{ color: T.purpleLight }} />
-              </motion.div>
-            </div>
-            <div className="flex flex-col items-center gap-1">
-              <span className="text-sm" style={{ color: T.textDim }}>
-                Generating your video…
-              </span>
-              <span className="text-[10px]" style={{ color: T.textMuted }}>
-                2-5 minutes remaining
-              </span>
-              <div
-                className="w-40 h-1 rounded-full overflow-hidden"
-                style={{ background: "rgba(255,255,255,0.05)" }}
-              >
-                <motion.div
-                  initial={{ width: "0%" }}
-                  animate={{ width: "60%" }}
-                  transition={{ duration: 4.5, ease: "easeInOut" }}
-                  className="h-full rounded-full"
-                  style={{
-                    background: `linear-gradient(90deg,${T.purple},${T.pink})`,
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        ) : step === "result" ? (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="w-full h-full rounded-xl overflow-hidden relative bg-black border border-white/10"
-          >
-            <video
-              src="/videos/seedance-1-pro.mp4"
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div
-                  className="w-16 h-1 rounded-full overflow-hidden"
-                  style={{ background: "rgba(255,255,255,0.08)" }}
-                >
-                  <div className="w-1/2 h-full rounded-full bg-purple-500" />
-                </div>
-                <span className="text-[10px] text-white/50">0:04 / 0:08</span>
-              </div>
-              <span className="text-[10px] px-2 py-0.5 rounded bg-green-500/10 border border-green-500/20 text-green-400">
-                ✓ Generated
-              </span>
-            </div>
-          </motion.div>
-        ) : (
-          <div className="text-center text-white/30">
-            <Film size={40} className="mx-auto mb-2 opacity-20" />
-            <p className="text-xs">Your video will appear here</p>
-          </div>
-        )}
-      </div>
-
-      <button
-        className="w-full py-2.5 rounded-xl text-sm font-semibold text-white mt-auto"
-        style={{ background: `linear-gradient(135deg,${T.purple},#4f46e5)` }}
-      >
-        <Wand2 size={14} className="inline mr-2" /> Generate Video · RM1.28
-      </button>
-    </div>
-  );
+  const currentDisplay = lines[currentLine]?.slice(0, currentChar) || "";
+  return [...displayed, currentDisplay];
 }
-
-/* ── Tab navigation ── */
-const TABS = [
-  { id: "chat", label: "Chat", icon: Sparkles },
-  { id: "image", label: "Image", icon: ImageIcon },
-  { id: "video", label: "Video", icon: Film },
-];
 
 export default function HeroAnimation() {
   const [activeTab, setActiveTab] = useState("chat");
+  const [phase, setPhase] = useState("idle"); // idle | typing | processing | output
+  const [outputLines, setOutputLines] = useState([]);
+  const [showCursor, setShowCursor] = useState(true);
+  const [glitchActive, setGlitchActive] = useState(false);
+  const terminalRef = useRef(null);
 
+  const demo = DEMO_DATA[activeTab];
+
+  // Blink cursor with irregular timing
+  useEffect(() => {
+    const blink = () => {
+      setShowCursor((p) => !p);
+      setTimeout(blink, 400 + Math.random() * 800);
+    };
+    const id = setTimeout(blink, 500);
+    return () => clearTimeout(id);
+  }, [activeTab]);
+
+  // Auto-cycle tabs
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveTab((prev) => {
-        const idx = TABS.findIndex((t) => t.id === prev);
-        return TABS[(idx + 1) % TABS.length].id;
-      });
-    }, 20000);
+      setPhase("idle");
+      setOutputLines([]);
+      setGlitchActive(true);
+      setTimeout(() => setGlitchActive(false), 300);
+      const idx = TABS.findIndex((t) => t.id === activeTab);
+      setActiveTab(TABS[(idx + 1) % TABS.length].id);
+    }, 18000);
     return () => clearInterval(interval);
-  }, []);
+  }, [activeTab]);
+
+  // Run demo sequence
+  useEffect(() => {
+    let cancelled = false;
+    const run = async () => {
+      setPhase("idle");
+      setOutputLines([]);
+      await new Promise((r) => setTimeout(r, 600));
+
+      setPhase("typing");
+      await new Promise((r) => setTimeout(r, 2500));
+
+      setPhase("processing");
+      await new Promise((r) => setTimeout(r, 2000));
+
+      setPhase("output");
+      if (!cancelled) {
+        // Build output progressively
+        for (let i = 0; i < demo.response.length; i++) {
+          setOutputLines((prev) => [...prev, demo.response[i]]);
+          await new Promise((r) => setTimeout(r, 60 + Math.random() * 100));
+        }
+      }
+    };
+    run();
+    return () => {
+      cancelled = true;
+    };
+  }, [activeTab, demo.response]);
+
+  // Scroll to bottom
+  useEffect(() => {
+    if (terminalRef.current) {
+      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+    }
+  }, [outputLines, phase]);
+
+  const getStatusColor = () => {
+    switch (phase) {
+      case "idle":
+        return C.textMuted;
+      case "typing":
+        return C.accent;
+      case "processing":
+        return C.secondary;
+      case "output":
+        return "#00ff00";
+      default:
+        return C.textDim;
+    }
+  };
+
+  const getStatusText = () => {
+    switch (phase) {
+      case "idle":
+        return "STANDBY";
+      case "typing":
+        return "INPUT_ACTIVE";
+      case "processing":
+        return "COMPUTE_DNA::RUNNING";
+      case "output":
+        return "SEQUENCE_COMPLETE";
+      default:
+        return "UNKNOWN";
+    }
+  };
 
   return (
-    <div
-      className="absolute inset-0 flex flex-col rounded-2xl overflow-hidden select-none"
-      style={{ background: T.bg, border: `1px solid ${T.border}` }}
-    >
+    <div className="relative h-full flex flex-col bg-[#0a0a0a] font-mono text-sm overflow-hidden">
+      {/* Background effects */}
       <div
-        className="flex items-center justify-center gap-1 p-2"
-        style={{ background: "#060606", borderBottom: `1px solid ${T.border}` }}
+        className="absolute inset-0 opacity-30"
+        style={{
+          backgroundImage: `radial-gradient(circle at 20% 80%, ${C.accentDim} 0%, transparent 50%),
+                           radial-gradient(circle at 80% 20%, ${C.secondaryDim} 0%, transparent 50%)`,
+        }}
+      />
+      <Scanlines />
+
+      {/* Header */}
+      <div className="relative z-10 flex items-center justify-between px-4 py-3 border-b border-[#2a2a2a] bg-[#111]">
+        <div className="flex items-center gap-3">
+          <div className="flex gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#E85D04]" />
+            <div className="w-2.5 h-2.5 rounded-full bg-[#6b6560]" />
+            <div className="w-2.5 h-2.5 rounded-full bg-[#00F5D4]" />
+          </div>
+          <span className="text-[10px] text-[#3a3a3a] uppercase tracking-widest">
+            atlasflux_lab // v3.1.0
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span
+            className="w-1.5 h-1.5 rounded-full animate-pulse"
+            style={{ backgroundColor: getStatusColor() }}
+          />
+          <span
+            className="text-[10px] uppercase tracking-widest"
+            style={{ color: getStatusColor() }}
+          >
+            {getStatusText()}
+          </span>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="relative z-10 flex border-b border-[#2a2a2a]">
+        {TABS.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => {
+              setPhase("idle");
+              setOutputLines([]);
+              setActiveTab(tab.id);
+            }}
+            className={`flex items-center gap-2 px-4 py-2.5 text-[11px] uppercase tracking-widest border-r border-[#2a2a2a] transition-all ${
+              activeTab === tab.id
+                ? "bg-[#1a1a1a] text-[#E85D04] border-b-2 border-b-[#E85D04]"
+                : "text-[#6b6560] hover:text-[#e8e4dc] hover:bg-[#111]"
+            }`}
+          >
+            <span className="text-xs">{tab.icon}</span>
+            <GlitchText
+              text={tab.label}
+              active={glitchActive && activeTab === tab.id}
+            />
+          </button>
+        ))}
+      </div>
+
+      {/* Terminal body */}
+      <div
+        ref={terminalRef}
+        className="relative z-10 flex-1 p-4 overflow-auto"
+        style={{
+          scrollbarWidth: "thin",
+          scrollbarColor: "#2a2a2a #0a0a0a",
+        }}
       >
-        {TABS.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-medium transition-all duration-200"
+        {/* DNA Helix decoration */}
+        <DNAHelix active={phase === "processing"} />
+
+        {/* Prompt */}
+        <AnimatePresence mode="wait">
+          {(phase === "typing" ||
+            phase === "processing" ||
+            phase === "output") && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="mb-4"
+            >
+              <div className="flex items-center gap-2 text-[#6b6560] text-[10px] uppercase tracking-widest mb-2">
+                <span>{"//"}</span>
+                <span>User Query</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-[#E85D04] mt-0.5">{">"}</span>
+                <span className="text-[#e8e4dc]">
+                  {phase === "typing" ? (
+                    <TypewriterText text={demo.prompt} speed={30} />
+                  ) : (
+                    demo.prompt
+                  )}
+                  {phase === "typing" && (
+                    <span
+                      className={`inline-block w-2 h-4 bg-[#E85D04] ml-1 align-middle ${
+                        showCursor ? "opacity-100" : "opacity-0"
+                      }`}
+                    />
+                  )}
+                </span>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Processing indicator */}
+        <AnimatePresence>
+          {phase === "processing" && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mb-4 overflow-hidden"
+            >
+              <div className="flex items-center gap-3 py-2">
+                <div className="flex gap-1">
+                  {[0, 1, 2].map((i) => (
+                    <motion.div
+                      key={i}
+                      animate={{
+                        scaleY: [0.3, 1, 0.3],
+                        opacity: [0.3, 1, 0.3],
+                      }}
+                      transition={{
+                        duration: 0.6,
+                        repeat: Infinity,
+                        delay: i * 0.15,
+                      }}
+                      className="w-1 h-4 bg-[#00F5D4]"
+                    />
+                  ))}
+                </div>
+                <span className="text-[10px] text-[#00F5D4] uppercase tracking-widest animate-pulse">
+                  Computing DNA sequence...
+                </span>
+              </div>
+              {/* Progress bar */}
+              <div className="w-full h-1 bg-[#1a1a1a] overflow-hidden">
+                <motion.div
+                  initial={{ width: "0%" }}
+                  animate={{ width: "100%" }}
+                  transition={{ duration: 2, ease: "easeInOut" }}
+                  className="h-full"
+                  style={{
+                    background: `linear-gradient(90deg, ${C.accent}, ${C.secondary})`,
+                  }}
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Output */}
+        <div className="space-y-0.5">
+          {outputLines.map((line, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.1 }}
+              className="text-[13px] leading-relaxed"
               style={{
-                background: isActive ? "rgba(255,255,255,0.08)" : "transparent",
-                color: isActive ? T.text : T.textMuted,
-                border: isActive
-                  ? `1px solid ${T.border}`
-                  : "1px solid transparent",
+                color: line.startsWith(">>")
+                  ? C.textDim
+                  : line.startsWith("RESULT:") || line.startsWith("FRAME")
+                    ? C.accent
+                    : line.startsWith("[")
+                      ? C.secondary
+                      : line.includes("░") || line.includes("█")
+                        ? C.accent
+                        : C.text,
+                fontWeight:
+                  line.startsWith("RESULT:") || line.startsWith("ATG")
+                    ? "bold"
+                    : "normal",
               }}
             >
-              <Icon size={13} />
-              {tab.label}
-            </button>
-          );
-        })}
+              {line.includes("░") || line.includes("█") ? (
+                <span className="font-mono tracking-tight">{line}</span>
+              ) : (
+                line
+              )}
+            </motion.div>
+          ))}
+          {phase === "output" && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ repeat: Infinity, duration: 0.8 }}
+              className="mt-2"
+            >
+              <span className="text-[#E85D04]">{">"}</span>
+              <span
+                className={`inline-block w-2 h-4 bg-[#E85D04] ml-1 align-middle ${
+                  showCursor ? "opacity-100" : "opacity-0"
+                }`}
+              />
+            </motion.div>
+          )}
+        </div>
       </div>
-      <div className="flex-1 relative overflow-hidden">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.25 }}
-            className="absolute inset-0"
+
+      {/* Footer status */}
+      <div className="relative z-10 flex items-center justify-between px-4 py-2 border-t border-[#2a2a2a] bg-[#111] text-[10px]">
+        <div className="flex items-center gap-4 text-[#3a3a3a]">
+          <span>UTF-8</span>
+          <span>DNA-SEQ</span>
+          <span>v3.1.0-stable</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span style={{ color: getStatusColor() }}>●</span>
+          <span
+            className="uppercase tracking-widest"
+            style={{ color: getStatusColor() }}
           >
-            {activeTab === "chat" && <ChatDemo />}
-            {activeTab === "image" && <ImageDemo />}
-            {activeTab === "video" && <VideoDemo />}
-          </motion.div>
-        </AnimatePresence>
+            {getStatusText()}
+          </span>
+        </div>
       </div>
     </div>
   );
+}
+
+// Helper: Typewriter with irregular speed
+function TypewriterText({ text, speed = 25 }) {
+  const [displayed, setDisplayed] = useState("");
+
+  useEffect(() => {
+    let i = 0;
+    const type = () => {
+      if (i <= text.length) {
+        setDisplayed(text.slice(0, i));
+        i++;
+        const delay = speed + (Math.random() - 0.5) * speed * 1.2;
+        setTimeout(type, Math.max(8, delay));
+      }
+    };
+    type();
+  }, [text, speed]);
+
+  return <span>{displayed}</span>;
 }

@@ -23,11 +23,17 @@ export default async function DocsPage() {
   }
 
   return (
-    <div className="bg-black text-white min-h-screen">
-      <div className="max-w-5xl mx-auto px-6 py-16">
-        <h1 className="text-5xl font-bold tracking-tight mb-10">
-          <span className="text-white/30">AtlasFlux</span> Documentation
+    <div className="bg-[#0c0c0c] text-[#e8e4dc] min-h-screen lg:pl-20">
+      <div className="px-6 lg:px-16 py-16 lg:py-24 max-w-4xl">
+        <span className="font-mono text-xs text-[#6b6560] uppercase tracking-[0.2em] block mb-4">
+          Reference
+        </span>
+        <h1 className="text-4xl lg:text-6xl font-bold tracking-tight mb-4">
+          Documentation
         </h1>
+        <p className="text-[#6b6560] max-w-md mb-12">
+          Everything you need to know about AtlasFlux. No fluff.
+        </p>
         <DocsClientWrapper data={data} />
       </div>
     </div>

@@ -1,170 +1,345 @@
 "use client";
 import { motion } from "framer-motion";
-import { ContainerScroll } from "@/components/ContainerScroll";
-import HeroAnimation from "@/components/HeroAnimation";
-import NeuralFlow from "@/components/NeuralFlow";
 import Link from "next/link";
+import HeroAnimation from "@/components/HeroAnimation";
 
 const fadeIn = (delay = 0) => ({
-  initial: { opacity: 0, y: 30 },
+  initial: { opacity: 0, y: 40 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, amount: 0.3 },
-  transition: { delay, duration: 0.6 },
+  viewport: { once: true, amount: 0.2 },
+  transition: { delay, duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] },
 });
 
 const features = [
   {
-    icon: "fas fa-brain",
-    title: "200+ AI Models",
-    desc: "Automatic selection across OpenRouter, Replicate & WaveSpeed.",
+    num: "01",
+    title: "400+ AI Models",
+    desc: "Automatic selection across OpenRouter, Replicate & WaveSpeed. We pick the best, you just ask.",
+    size: "large", // asymmetric sizing
   },
   {
-    icon: "fas fa-globe",
-    title: "DeepSearch & Research",
-    desc: "Live web search with citations, deep research up to 50 pages.",
+    num: "02",
+    title: "DeepSearch",
+    desc: "Live web search with citations. Deep research up to 50 pages.",
+    size: "small",
   },
   {
-    icon: "fas fa-microchip",
-    title: "Reasoning & BigT",
-    desc: "Chain‑of‑thought reasoning combined with web search.",
+    num: "03",
+    title: "Reasoning",
+    desc: "Chain-of-thought reasoning combined with real-time web search.",
+    size: "small",
   },
   {
-    icon: "fas fa-code",
+    num: "04",
+    title: "Image & Video",
+    desc: "Hundreds of models for creation, editing, and upscaling.",
+    size: "medium",
+  },
+  {
+    num: "05",
+    title: "Music & Voice",
+    desc: "Create songs, clone voices in 15 languages, separate audio.",
+    size: "small",
+  },
+  {
+    num: "06",
     title: "Coding Mode",
     desc: "Premium programming models for debugging and generation.",
-  },
-  {
-    icon: "fas fa-image",
-    title: "Image & Video Gen",
-    desc: "Hundreds of models for image/video creation, editing, and upscaling.",
-  },
-  {
-    icon: "fas fa-music",
-    title: "Music & Voice Cloning",
-    desc: "Create songs, clone voices in 15 languages, separate audio.",
+    size: "medium",
   },
 ];
 
 export default function HomePage() {
   return (
     <>
-      {/* HERO – ContainerScroll dengan NeuralFlow */}
-      <section className="relative pt-24 md:pt-28">
-        <ContainerScroll
-          titleComponent={
-            <div className="space-y-6 px-4">
-              <motion.span
-                {...fadeIn(0)}
-                className="inline-block px-3 py-1 md:px-4 md:py-1.5 rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-md text-white/70 text-xs md:text-sm font-medium"
-              >
-                ✦ 30 Free Daily Credits · 120 Bonus on Sign‑up
-              </motion.span>
-              <motion.h1
-                {...fadeIn(0.1)}
-                className="text-5xl md:text-7xl font-extrabold tracking-tight text-white"
-              >
-                Intelligence{" "}
-                <span className="text-white/40">without limits</span>
-              </motion.h1>
-              <motion.p
-                {...fadeIn(0.2)}
-                className="text-lg md:text-xl text-white/50 max-w-2xl mx-auto"
-              >
-                200+ AI models. Chat, images, video, music, and more. All in one
-                transparent platform.
-              </motion.p>
-              <motion.div
-                {...fadeIn(0.3)}
-                className="flex flex-wrap justify-center gap-4"
-              >
-                <a
-                  href="https://ai.atlasflux.my"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-white text-black font-semibold px-8 py-4 rounded-full hover:bg-neutral-200 transition"
-                >
-                  Start Exploring <i className="fas fa-arrow-right"></i>
-                </a>
-                <Link
-                  href="/#features"
-                  className="inline-flex items-center gap-2 border border-white/20 text-white font-semibold px-8 py-4 rounded-full hover:bg-white/10 transition"
-                >
-                  Discover Features
-                </Link>
-              </motion.div>
-            </div>
-          }
-        >
-          <NeuralFlow />
-        </ContainerScroll>
-      </section>
-
-      {/* HERO ANIMATION – Demo interaktif */}
-      <section className="py-16 md:py-24">
-        <div className="container">
-          <motion.div {...fadeIn(0)} className="text-center mb-12 space-y-4">
-            <h2 className="text-4xl md:text-5xl font-bold text-white">
-              See it in <span className="text-white/40">action</span>
-            </h2>
-            <p className="text-lg text-white/40 max-w-2xl mx-auto">
-              Watch how easy it is to chat, generate images, and create videos —
-              all with one platform.
-            </p>
-          </motion.div>
-          <div className="max-w-5xl mx-auto min-h-[650px] md:min-h-[800px] relative rounded-2xl border border-white/10 overflow-hidden shadow-2xl shadow-black/40">
-            <HeroAnimation />
-          </div>
-        </div>
-      </section>
-
-      {/* FEATURES */}
-      <section id="features" className="py-24 md:py-32">
-        <div className="container">
-          <motion.div {...fadeIn(0)} className="text-center mb-16 space-y-4">
-            <h2 className="text-4xl md:text-5xl font-bold text-white">
-              Capabilities that <span className="text-white/40">elevate</span>
-            </h2>
-            <p className="text-lg text-white/40 max-w-2xl mx-auto">
-              No model names to memorize. Just powerful features that work.
-            </p>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((f, i) => (
-              <motion.div
-                key={i}
-                {...fadeIn(i * 0.1)}
-                className="bg-white/[0.03] border border-white/10 rounded-2xl p-8 hover:border-white/20 backdrop-blur-sm transition"
-              >
-                <div className="text-3xl text-white/40 mb-5">
-                  <i className={f.icon}></i>
-                </div>
-                <h3 className="text-xl font-bold mb-3 text-white">{f.title}</h3>
-                <p className="text-white/40">{f.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FINAL CTA (tanpa Pricing) */}
-      <section className="py-36 text-center">
-        <motion.div {...fadeIn(0)} className="space-y-8">
-          <h2 className="text-4xl md:text-5xl font-bold text-white">
-            Ready to go <span className="text-white/40">beyond</span>?
-          </h2>
-          <p className="text-lg text-white/40 max-w-xl mx-auto">
-            Join thousands of creators, developers, and curious minds. Your 30
-            free credits are waiting.
-          </p>
-          <a
-            href="https://ai.atlasflux.my"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-white text-black font-semibold px-10 py-5 rounded-full hover:bg-neutral-200 transition text-lg"
+      {/* HERO — Asymmetric, oversized typography */}
+      <section className="relative min-h-screen flex flex-col justify-center pt-20 lg:pt-0 lg:pl-20">
+        <div className="px-6 lg:px-16 max-w-[1400px]">
+          {/* Eyebrow */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="mb-8"
           >
-            Launch App <i className="fas fa-rocket"></i>
-          </a>
+            <span className="font-mono text-xs text-[#6b6560] uppercase tracking-[0.2em]">
+              AtlasFlux AI Platform
+            </span>
+          </motion.div>
+
+          {/* Main headline — broken into lines for asymmetric feel */}
+          <div className="space-y-2 lg:space-y-4 mb-12">
+            <motion.h1
+              initial={{ opacity: 0, y: 60 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.8,
+                delay: 0.1,
+                ease: [0.25, 0.46, 0.45, 0.94],
+              }}
+              className="text-6xl sm:text-7xl lg:text-[8rem] xl:text-[10rem] font-bold leading-[0.9] tracking-tighter"
+            >
+              Intelligence
+            </motion.h1>
+            <motion.h1
+              initial={{ opacity: 0, y: 60 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.8,
+                delay: 0.2,
+                ease: [0.25, 0.46, 0.45, 0.94],
+              }}
+              className="text-6xl sm:text-7xl lg:text-[8rem] xl:text-[10rem] font-bold leading-[0.9] tracking-tighter text-[#6b6560]"
+            >
+              without
+            </motion.h1>
+            <motion.h1
+              initial={{ opacity: 0, y: 60 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.8,
+                delay: 0.3,
+                ease: [0.25, 0.46, 0.45, 0.94],
+              }}
+              className="text-6xl sm:text-7xl lg:text-[8rem] xl:text-[10rem] font-bold leading-[0.9] tracking-tighter"
+            >
+              <span className="underline-accent">limits</span>
+            </motion.h1>
+          </div>
+
+          {/* Subhead + CTAs — offset to the right */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="lg:ml-[20%] max-w-xl"
+          >
+            <p className="text-lg lg:text-xl text-[#6b6560] mb-8 leading-relaxed">
+              400+ AI models. Chat, images, video, music. No subscriptions. No
+              model names to memorize. Just ask and get answers.
+            </p>
+
+            <div className="flex flex-wrap gap-4">
+              <a
+                href="https://ai.atlasflux.my"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 bg-[#e85d04] text-[#0c0c0c] font-bold px-8 py-4 text-sm hover-lift"
+              >
+                Start Exploring
+                <span className="font-mono">→</span>
+              </a>
+              <Link
+                href="/#features"
+                className="inline-flex items-center gap-3 border-2 border-[#2a2a2a] text-[#e8e4dc] font-bold px-8 py-4 text-sm hover:border-[#e8e4dc] hover-lift transition-colors"
+              >
+                Discover Features
+              </Link>
+            </div>
+
+            {/* Stats row — raw, unpolished */}
+            <div className="flex gap-8 mt-12 pt-8 border-t border-[#2a2a2a]">
+              <div>
+                <p className="text-3xl font-bold">30</p>
+                <p className="font-mono text-xs text-[#6b6560] uppercase tracking-wider">
+                  Free Credits Daily
+                </p>
+              </div>
+              <div>
+                <p className="text-3xl font-bold">400+</p>
+                <p className="font-mono text-xs text-[#6b6560] uppercase tracking-wider">
+                  AI Models
+                </p>
+              </div>
+              <div>
+                <p className="text-3xl font-bold">0</p>
+                <p className="font-mono text-xs text-[#6b6560] uppercase tracking-wider">
+                  Subscriptions
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Decorative element — offset, asymmetric */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 1 }}
+          className="absolute bottom-8 right-8 lg:right-16 font-mono text-xs text-[#2a2a2a] hidden lg:block"
+        >
+          <pre className="leading-tight">
+            {`┌─────────────────┐
+│  NEURAL ENGINE  │
+│    ACTIVE       │
+│  v2.4.1-stable  │
+└─────────────────┘`}
+          </pre>
         </motion.div>
+      </section>
+
+      {/* MARQUEE — raw, industrial */}
+      <div className="border-y border-[#2a2a2a] py-4 overflow-hidden bg-[#111]">
+        <div className="marquee">
+          <div className="marquee-content font-mono text-sm text-[#6b6560] uppercase tracking-widest">
+            Chat • Image • Video • Music • Voice • Code • Research • Analysis •
+            Chat • Image • Video • Music • Voice • Code • Research • Analysis •
+          </div>
+        </div>
+      </div>
+
+      {/* DEMO SECTION — Terminal aesthetic */}
+      <section className="py-24 lg:py-32 lg:pl-20">
+        <div className="px-6 lg:px-16">
+          <motion.div {...fadeIn(0)} className="mb-16">
+            <span className="font-mono text-xs text-[#6b6560] uppercase tracking-[0.2em] block mb-4">
+              Interactive Demo
+            </span>
+            <h2 className="text-4xl lg:text-6xl font-bold tracking-tight">
+              See it <span className="text-[#6b6560]">break</span> things.
+            </h2>
+          </motion.div>
+
+          <motion.div
+            {...fadeIn(0.2)}
+            className="border-2 border-[#2a2a2a] bg-[#111] overflow-hidden"
+            style={{ minHeight: "600px" }}
+          >
+            <HeroAnimation />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* FEATURES — Asymmetric bento grid */}
+      <section id="features" className="py-24 lg:py-32 lg:pl-20">
+        <div className="px-6 lg:px-16 max-w-[1400px]">
+          <motion.div {...fadeIn(0)} className="mb-20">
+            <span className="font-mono text-xs text-[#6b6560] uppercase tracking-[0.2em] block mb-4">
+              Capabilities
+            </span>
+            <h2 className="text-4xl lg:text-6xl font-bold tracking-tight max-w-2xl">
+              No model names to memorize. Just powerful features.
+            </h2>
+          </motion.div>
+
+          {/* Bento grid — intentional asymmetry */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+            {features.map((f, i) => {
+              // Determine grid span based on size
+              const spanClass =
+                f.size === "large"
+                  ? "md:col-span-2 lg:col-span-2 lg:row-span-2"
+                  : f.size === "medium"
+                    ? "md:col-span-1 lg:col-span-1"
+                    : "";
+
+              return (
+                <motion.div
+                  key={i}
+                  {...fadeIn(i * 0.1)}
+                  className={`group border-2 border-[#2a2a2a] bg-[#111] p-6 lg:p-8 hover:border-[#e85d04] transition-colors duration-300 ${spanClass}`}
+                >
+                  <div className="flex items-start justify-between mb-6">
+                    <span className="font-mono text-xs text-[#6b6560]">
+                      {f.num}
+                    </span>
+                    <span className="w-8 h-8 border border-[#2a2a2a] group-hover:border-[#e85d04] group-hover:bg-[#e85d04] flex items-center justify-center transition-all">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                        className="text-[#6b6560] group-hover:text-[#0c0c0c]"
+                      >
+                        <path
+                          d="M1 11L11 1M11 1H3M11 1V9"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        />
+                      </svg>
+                    </span>
+                  </div>
+
+                  <h3
+                    className={`font-bold mb-3 ${f.size === "large" ? "text-2xl lg:text-3xl" : "text-xl"}`}
+                  >
+                    {f.title}
+                  </h3>
+                  <p className="text-[#6b6560] leading-relaxed">{f.desc}</p>
+
+                  {f.size === "large" && (
+                    <div className="mt-8 pt-6 border-t border-[#2a2a2a]">
+                      <div className="flex items-center gap-4">
+                        <div className="w-2 h-2 bg-[#e85d04]" />
+                        <span className="font-mono text-xs text-[#6b6560]">
+                          Auto-routing enabled
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA SECTION — Raw, high contrast */}
+      <section className="py-32 lg:py-48 lg:pl-20 bg-[#f5f1e8] text-[#0c0c0c]">
+        <div className="px-6 lg:px-16 max-w-[1400px]">
+          <motion.div {...fadeIn(0)} className="max-w-3xl">
+            <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#6b6560] block mb-6">
+              Ready?
+            </span>
+            <h2 className="text-5xl lg:text-7xl font-bold tracking-tight mb-8">
+              Your 30 free credits are waiting.
+            </h2>
+            <p className="text-lg text-[#6b6560] mb-12 max-w-xl">
+              Join thousands of creators, developers, and curious minds. No
+              credit card. No subscription trap.
+            </p>
+
+            <div className="flex flex-wrap gap-4">
+              <a
+                href="https://ai.atlasflux.my"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 bg-[#0c0c0c] text-[#f5f1e8] font-bold px-8 py-4 text-sm hover:bg-[#e85d04] hover:text-[#0c0c0c] transition-colors"
+              >
+                Launch App
+                <span className="font-mono">→</span>
+              </a>
+              <Link
+                href="/models"
+                className="inline-flex items-center gap-3 border-2 border-[#0c0c0c] text-[#0c0c0c] font-bold px-8 py-4 text-sm hover:bg-[#0c0c0c] hover:text-[#f5f1e8] transition-colors"
+              >
+                Browse Models
+              </Link>
+            </div>
+          </motion.div>
+
+          {/* Decorative — offset, raw */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5 }}
+            className="mt-24 pt-8 border-t-2 border-[#0c0c0c]"
+          >
+            <div className="flex justify-between items-end">
+              <div className="font-mono text-xs text-[#6b6560]">
+                <p>ATLASFLUX AI PLATFORM</p>
+                <p>v2.4.1-stable</p>
+              </div>
+              <div className="text-right">
+                <p className="text-6xl lg:text-8xl font-bold opacity-10">30</p>
+                <p className="font-mono text-xs text-[#6b6560]">
+                  FREE CREDITS DAILY
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </section>
     </>
   );

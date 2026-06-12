@@ -2,26 +2,16 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import {
-  Search,
-  X,
-  Zap,
-  FileText,
-  Filter,
-  ChevronDown,
-  Cpu,
-} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const BASE_URL = "https://ai.atlasflux.my"; // URL aplikasi AI untuk logo & detail
+const BASE_URL = "https://ai.atlasflux.my";
 
-// ---------- Helper untuk kos ----------
 function getDisplayCost(model) {
   if (model.pricingType === "token") {
     const inputRate = model.inputCreditsPerToken || 0;
     const outputRate = model.outputCreditsPerToken || 0;
     const est = (inputRate * 100 + outputRate * 200).toFixed(1);
-    return `~${est} credits / msg`;
+    return `~${est} credits/msg`;
   }
   if (model.cost) return `${model.cost} credits`;
   if (model.usdCost) {
@@ -31,7 +21,6 @@ function getDisplayCost(model) {
   return "Free";
 }
 
-// ---------- Helper: provider display ----------
 function getDisplayProvider(model) {
   const provider = model.provider || "";
   if (
@@ -65,7 +54,6 @@ function getDisplayProvider(model) {
   return provider;
 }
 
-// ---------- Helper: kategori model ----------
 function getCategory(model) {
   const type = model.type?.toLowerCase() || "";
   const id = model.id?.toLowerCase() || "";
@@ -96,115 +84,61 @@ function getCategory(model) {
   return "Chat";
 }
 
-// ---------- Komponen Logo ----------
-function ModelLogo({ model, size = 38 }) {
-  const [imgError, setImgError] = useState(false);
-  const logo = model.logo;
-
-  if (!logo || imgError) {
-    return (
-      <div
-        className="flex items-center justify-center bg-purple-500/10 border border-purple-500/30 text-purple-400 font-bold flex-shrink-0"
-        style={{ width: size, height: size, fontSize: size * 0.35 }}
-      >
-        {model.name?.charAt(0).toUpperCase() || "?"}
-      </div>
-    );
-  }
-
-  return (
-    <img
-      src={`${BASE_URL}${logo}`} // gabungkan URL asas dengan laluan relatif
-      alt={model.name}
-      onError={() => setImgError(true)}
-      className="object-contain bg-white/5 flex-shrink-0"
-      style={{ width: size, height: size }}
-    />
-  );
-}
-
-// ---------- Kategori untuk tapisan ----------
 const CATEGORIES = ["All", "Chat", "Image", "Video", "Audio", "3D", "Tools"];
 
-// ---------- Komponen Utama ----------
 export default function ModelsRenderer({ data }) {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
-  const [selectedProvider, setSelectedProvider] = useState("All");
-  const [showFilters, setShowFilters] = useState(false);
+  const [expandedId, setExpandedId] = useState(null);
 
-  // Senarai provider unik
-  const providers = useMemo(() => {
-    const set = new Set();
-    data.forEach((m) => set.add(getDisplayProvider(m)));
-    return ["All", ...Array.from(set).sort()];
-  }, [data]);
-
-  // Tapis model
   const filteredModels = useMemo(() => {
     let models = [...data];
-
-    // Kategori
     if (activeCategory !== "All") {
       models = models.filter((m) => getCategory(m) === activeCategory);
     }
-
-    // Carian
     if (search.trim()) {
       const q = search.toLowerCase();
       models = models.filter(
         (m) =>
           m.name?.toLowerCase().includes(q) ||
           m.id?.toLowerCase().includes(q) ||
-          m.provider?.toLowerCase().includes(q) ||
-          m.openRouterDescription?.toLowerCase().includes(q) ||
-          m.descriptionEn?.toLowerCase().includes(q),
+          m.provider?.toLowerCase().includes(q),
       );
     }
-
-    // Provider
-    if (selectedProvider !== "All") {
-      models = models.filter((m) => getDisplayProvider(m) === selectedProvider);
-    }
-
     return models;
-  }, [data, activeCategory, search, selectedProvider]);
+  }, [data, activeCategory, search]);
 
   return (
-    <div className="space-y-6">
-      {/* ===== BAR CARIAN ===== */}
-      <div className="relative">
-        <Search
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-          size={16}
-        />
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search models..."
-          className="w-full pl-10 pr-10 py-3 border border-white/10 bg-white/5 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition"
-        />
-        {search && (
-          <button
-            onClick={() => setSearch("")}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
-          >
-            <X size={16} />
-          </button>
-        )}
+    <div className="space-y-8">
+      {/* Search — raw, utilitarian */}
+      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-end justify-between border-b-2 border-[#2a2a2a] pb-6">
+        <div className="w-full sm:max-w-md">
+          <label className="font-mono text-xs text-[#6b6560] uppercase tracking-widest block mb-2">
+            Search Models
+          </label>
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="gpt, claude, image, etc."
+            className="w-full bg-transparent border-2 border-[#2a2a2a] px-4 py-3 text-sm text-[#e8e4dc] placeholder-[#3a3a3a] focus:border-[#e85d04] focus:outline-none transition-colors font-mono"
+          />
+        </div>
+        <div className="font-mono text-xs text-[#6b6560]">
+          {filteredModels.length} models found
+        </div>
       </div>
 
-      {/* ===== TAB KATEGORI ===== */}
-      <div className="flex border-b border-white/10 overflow-x-auto">
+      {/* Category tabs — raw, tabular */}
+      <div className="flex flex-wrap gap-1 border-b border-[#2a2a2a]">
         {CATEGORIES.map((cat) => (
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
-            className={`px-4 py-3 text-sm font-semibold border-b-2 whitespace-nowrap transition ${
+            className={`px-4 py-2 font-mono text-xs uppercase tracking-wider border-b-2 transition-colors ${
               activeCategory === cat
-                ? "border-purple-500 text-purple-400"
-                : "border-transparent text-gray-400 hover:text-gray-200"
+                ? "border-[#e85d04] text-[#e8e4dc]"
+                : "border-transparent text-[#6b6560] hover:text-[#e8e4dc]"
             }`}
           >
             {cat}
@@ -212,60 +146,16 @@ export default function ModelsRenderer({ data }) {
         ))}
       </div>
 
-      {/* ===== BUTANG TAPISAN PROVIDER ===== */}
-      <div>
-        <button
-          onClick={() => setShowFilters(!showFilters)}
-          className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition"
-        >
-          <Filter size={16} />
-          Filters
-          <ChevronDown
-            size={16}
-            className={`transition-transform ${showFilters ? "rotate-180" : ""}`}
-          />
-        </button>
-      </div>
-
-      <AnimatePresence>
-        {showFilters && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden"
-          >
-            <div className="border border-white/10 bg-white/5 p-4 mb-6">
-              <label className="text-xs text-gray-400 block mb-2">
-                Provider
-              </label>
-              <select
-                value={selectedProvider}
-                onChange={(e) => setSelectedProvider(e.target.value)}
-                className="w-full border border-gray-600 bg-gray-900 text-white px-3 py-2 text-sm focus:outline-none focus:border-purple-500/50"
-              >
-                {providers.map((p) => (
-                  <option key={p} value={p}>
-                    {p === "All" ? "All Providers" : p}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* ===== GRID MODEL ===== */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {filteredModels.map((model) => {
+      {/* Models list — table/list hybrid */}
+      <div className="space-y-0">
+        {filteredModels.map((model, idx) => {
+          const isExpanded = expandedId === model.id;
           const desc =
             model.openRouterDescription ||
             model.descriptionEn ||
             model.descriptionMy ||
             "";
-          const shortDesc = desc.length > 100 ? desc.slice(0, 100) + "…" : desc;
-
-          // 🔁 Bezakan model MYR (usdCost/prices) vs kredit (credit)
+          const shortDesc = desc.length > 120 ? desc.slice(0, 120) + "…" : desc;
           const isMYRModel =
             model.usdCost !== undefined ||
             (model.prices && model.prices.length > 0);
@@ -274,82 +164,131 @@ export default function ModelsRenderer({ data }) {
             : `${BASE_URL}/explore/${model.id}`;
 
           return (
-            <a
+            <motion.div
               key={model.id}
-              href={detailUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block border border-white/10 bg-white/[0.03] hover:border-gray-500 p-5 transition no-underline"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: idx * 0.02 }}
+              className="border-b border-[#2a2a2a] group"
             >
-              <div className="flex items-start gap-4">
-                <ModelLogo model={model} size={44} />
+              {/* Main row */}
+              <button
+                onClick={() => setExpandedId(isExpanded ? null : model.id)}
+                className="w-full flex items-start gap-4 py-4 px-2 hover:bg-[#111] transition-colors text-left"
+              >
+                {/* Number */}
+                <span className="font-mono text-xs text-[#3a3a3a] w-8 shrink-0 pt-1">
+                  {String(idx + 1).padStart(3, "0")}
+                </span>
+
+                {/* Content */}
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-white truncate">
-                    {model.name}
-                  </h3>
-                  <p className="text-xs text-gray-400">
-                    {getDisplayProvider(model)}
-                  </p>
-
-                  <p className="text-xs text-gray-500 mt-1 line-clamp-2">
-                    {shortDesc}
-                  </p>
-
-                  {/* Metadata tambahan */}
-                  <div className="flex flex-wrap items-center gap-2 mt-2">
-                    {model.contextWindow && (
-                      <span className="text-xs text-gray-500 flex items-center gap-1">
-                        <FileText size={12} />
-                        {model.contextWindow >= 1000
-                          ? `${(model.contextWindow / 1000).toFixed(0)}K`
-                          : model.contextWindow}{" "}
-                        tokens
-                      </span>
-                    )}
-                    {model.capabilities?.vision && (
-                      <span className="text-xs px-1.5 py-0.5 bg-blue-500/10 text-blue-300">
-                        Vision
-                      </span>
-                    )}
-                    {model.capabilities?.functionCalling && (
-                      <span className="text-xs px-1.5 py-0.5 bg-green-500/10 text-green-300">
-                        Tools
-                      </span>
-                    )}
-                    {model.capabilities?.jsonMode && (
-                      <span className="text-xs px-1.5 py-0.5 bg-yellow-500/10 text-yellow-300">
-                        JSON
-                      </span>
-                    )}
-                    {model.supportsNativeWebSearch && (
-                      <span className="text-xs px-1.5 py-0.5 bg-purple-500/10 text-purple-300">
-                        Web Search
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="flex items-center justify-between mt-3">
-                    <span className="flex items-center gap-1 text-sm font-semibold text-purple-400">
-                      <Zap size={14} />
+                  <div className="flex items-start justify-between gap-4 mb-1">
+                    <div>
+                      <h3 className="font-bold text-sm lg:text-base group-hover:text-[#e85d04] transition-colors">
+                        {model.name}
+                      </h3>
+                      <p className="font-mono text-xs text-[#6b6560] mt-0.5">
+                        {getDisplayProvider(model)} · {getCategory(model)}
+                      </p>
+                    </div>
+                    <span className="font-mono text-xs text-[#e85d04] shrink-0">
                       {getDisplayCost(model)}
                     </span>
-                    <span className="text-xs text-gray-600 font-mono">
-                      {model.id.length > 24
-                        ? model.id.substring(0, 24) + "…"
-                        : model.id}
-                    </span>
                   </div>
+
+                  <p className="text-xs text-[#6b6560] line-clamp-1 group-hover:line-clamp-none transition-all">
+                    {shortDesc}
+                  </p>
                 </div>
-              </div>
-            </a>
+
+                {/* Expand icon */}
+                <span
+                  className={`text-[#6b6560] transition-transform duration-200 ${isExpanded ? "rotate-90" : ""}`}
+                >
+                  →
+                </span>
+              </button>
+
+              {/* Expanded detail */}
+              <AnimatePresence>
+                {isExpanded && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="pl-12 pr-4 pb-6 pt-2 space-y-4">
+                      <p className="text-sm text-[#e8e4dc] leading-relaxed">
+                        {desc || "No description available."}
+                      </p>
+
+                      {/* Metadata grid */}
+                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-mono">
+                        {model.contextWindow && (
+                          <div className="border border-[#2a2a2a] p-3">
+                            <span className="text-[#6b6560] block mb-1">
+                              Context
+                            </span>
+                            <span className="text-[#e8e4dc]">
+                              {model.contextWindow >= 1000
+                                ? `${(model.contextWindow / 1000).toFixed(0)}K`
+                                : model.contextWindow}{" "}
+                              tokens
+                            </span>
+                          </div>
+                        )}
+                        {model.capabilities?.vision && (
+                          <div className="border border-[#2a2a2a] p-3">
+                            <span className="text-[#6b6560] block mb-1">
+                              Vision
+                            </span>
+                            <span className="text-[#e8e4dc]">Enabled</span>
+                          </div>
+                        )}
+                        {model.capabilities?.functionCalling && (
+                          <div className="border border-[#2a2a2a] p-3">
+                            <span className="text-[#6b6560] block mb-1">
+                              Tools
+                            </span>
+                            <span className="text-[#e8e4dc]">
+                              Function Call
+                            </span>
+                          </div>
+                        )}
+                        <div className="border border-[#2a2a2a] p-3">
+                          <span className="text-[#6b6560] block mb-1">ID</span>
+                          <span className="text-[#e8e4dc] truncate block">
+                            {model.id}
+                          </span>
+                        </div>
+                      </div>
+
+                      <a
+                        href={detailUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 bg-[#e85d04] text-[#0c0c0c] font-bold px-4 py-2 text-sm hover-lift"
+                      >
+                        Open in App →
+                      </a>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
           );
         })}
       </div>
 
       {filteredModels.length === 0 && (
-        <div className="text-center py-20 text-gray-400">
-          <Cpu size={48} className="mx-auto mb-4 opacity-50" />
-          <p>No models found.</p>
+        <div className="py-24 text-center border-2 border-dashed border-[#2a2a2a]">
+          <p className="font-mono text-xs text-[#6b6560] uppercase tracking-widest mb-2">
+            No Results
+          </p>
+          <p className="text-sm text-[#6b6560]">Try a different search term.</p>
         </div>
       )}
     </div>
